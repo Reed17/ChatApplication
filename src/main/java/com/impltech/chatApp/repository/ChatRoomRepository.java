@@ -8,4 +8,8 @@ import org.springframework.stereotype.Repository;
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
     // TODO
+    //  1) get room by id
+    //  2) get room by 2 users
+    //  3) get free manager rooms
+    //  4) get
 }
