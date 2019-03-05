@@ -1,16 +1,10 @@
 package com.impltech.chatApp.dto;
 
-import com.impltech.chatApp.enums.Role;
-
-import java.util.HashSet;
-import java.util.Set;
-
 public class UserDto {
     private Long userId;
     private String username;
     private String email;
     private String password;
-    private Set<Role> roles = new HashSet<>();
 
     public UserDto() {
     }
@@ -26,19 +20,11 @@ public class UserDto {
         this.password = password;
     }
 
-    public UserDto(String username, String email, String password, Set<Role> roles) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
-    }
-
-    public UserDto(Long userId, String username, String email, String password, Set<Role> roles) {
+    public UserDto(Long userId, String username, String email, String password) {
         this.userId = userId;
         this.username = username;
         this.email = email;
         this.password = password;
-        this.roles = roles;
     }
 
     public Long getUserId() {
@@ -73,11 +59,4 @@ public class UserDto {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 }

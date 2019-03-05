@@ -1,14 +1,10 @@
 package com.impltech.chatApp.entity;
 
-import com.impltech.chatApp.enums.Role;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Entity
 @Table(
@@ -35,16 +31,6 @@ public class User {
     @Size(min = 8, max = 30)
     private String password;
 
-    @Enumerated(value = EnumType.STRING)
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(
-            name = "app_user_roles",
-            joinColumns = {
-                    @JoinColumn(name = "user_id")
-            }
-    )
-    private Set<Role> roles = new HashSet<>();
-
     public User() {
     }
 
@@ -52,13 +38,6 @@ public class User {
         this.username = username;
         this.email = email;
         this.password = password;
-    }
-
-    public User(String username, String email, String password, Set<Role> roles) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.roles = roles;
     }
 
     public Long getUserId() {
@@ -93,14 +72,6 @@ public class User {
         this.password = password;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -123,7 +94,6 @@ public class User {
                 ", username='" + username + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", roles=" + roles +
                 '}';
     }
 }
