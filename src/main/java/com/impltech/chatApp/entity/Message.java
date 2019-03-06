@@ -12,24 +12,13 @@ public class Message {
     @SequenceGenerator(name = "message_gen", sequenceName = "message_id_seq")
     private Long messageId;
 
-    @NotBlank
     private String content;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private User from;
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private User to;
 
     public Message() {
     }
 
-    public Message(String content, User from, User to) {
+    public Message(String content) {
         this.content = content;
-        this.from = from;
-        this.to = to;
     }
 
     public Long getMessageId() {
@@ -46,22 +35,6 @@ public class Message {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public User getFrom() {
-        return from;
-    }
-
-    public void setFrom(User from) {
-        this.from = from;
-    }
-
-    public User getTo() {
-        return to;
-    }
-
-    public void setTo(User to) {
-        this.to = to;
     }
 
     @Override
@@ -82,8 +55,6 @@ public class Message {
         return "Message{" +
                 "messageId=" + messageId +
                 ", content='" + content + '\'' +
-                ", from='" + from + '\'' +
-                ", to='" + to + '\'' +
                 '}';
     }
 }

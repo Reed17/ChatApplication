@@ -8,13 +8,11 @@ import org.springframework.stereotype.Component;
 public class MessageMapper implements BaseMapper<Message, MessageDto> {
     @Override
     public MessageDto toDto(final Message entity) {
-        return new MessageDto(entity.getMessageId(), entity.getContent(), entity.getFrom(), entity.getTo());
+        return null;
     }
 
     @Override
     public Message toEntity(final MessageDto dto) {
-        final Message msg = new Message(dto.getContent(), dto.getFrom(), dto.getTo());
-        msg.setMessageId(dto.getMessageId());
-        return msg;
+        return null;
     }
 }

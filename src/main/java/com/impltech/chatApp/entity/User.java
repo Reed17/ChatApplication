@@ -19,16 +19,10 @@ public class User {
     @SequenceGenerator(name = "user_gen", sequenceName = "user_id_seq", allocationSize = 1)
     private Long userId;
 
-    @NotBlank
-    @Size(min = 3, max = 30)
     private String username;
 
-    @NotBlank
-    @Email
     private String email;
 
-    @NotBlank
-    @Size(min = 8, max = 30)
     private String password;
 
     public User() {

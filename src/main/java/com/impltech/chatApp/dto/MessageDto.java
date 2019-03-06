@@ -1,21 +1,19 @@
 package com.impltech.chatApp.dto;
 
-import com.impltech.chatApp.entity.User;
-
 public class MessageDto {
     private Long messageId;
     private String content;
-    private User from;
-    private User to;
 
     public MessageDto() {
     }
 
-    public MessageDto(Long messageId, String content, User from, User to) {
+    public MessageDto(String content) {
+        this.content = content;
+    }
+
+    public MessageDto(Long messageId, String content) {
         this.messageId = messageId;
         this.content = content;
-        this.from = from;
-        this.to = to;
     }
 
     public Long getMessageId() {
@@ -34,19 +32,12 @@ public class MessageDto {
         this.content = content;
     }
 
-    public User getFrom() {
-        return from;
-    }
-
-    public void setFrom(User from) {
-        this.from = from;
-    }
-
-    public User getTo() {
-        return to;
-    }
-
-    public void setTo(User to) {
-        this.to = to;
+    @Override
+    public String toString() {
+        return "MessageDto{" +
+                "messageId=" + messageId +
+                ", content='" + content + '\'' +
+                '}';
     }
 }
+
