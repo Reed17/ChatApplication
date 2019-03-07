@@ -24,7 +24,7 @@ public class ChatController {
     }
 
     @MessageMapping("/chats/{chatRoomId}")
-    @SendTo("/topic/chats")
+    //@SendTo("/topic/chats")
     public ResponseEntity<?> handleChat(@Payload MessageDto messageDto,
                                                         @DestinationVariable("roomId") final Long chatRoomId) {
         messageService.sendMessage(chatRoomId, messageDto);
