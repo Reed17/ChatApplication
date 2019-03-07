@@ -1,5 +1,6 @@
 package com.impltech.chatApp.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -11,12 +12,19 @@ import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerCo
 @EnableWebSocketMessageBroker
 public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer {
 
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/ws").withSockJS();
+    private WebSocketProperties webSocketProperties;
+
+    @Autowired
+    public WebSocketConfiguration(WebSocketProperties webSocketProperties) {
+        this.webSocketProperties = webSocketProperties;
     }
 
     @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint(webSocketProperties.getEndpoint()).withSockJS();
+    }
+
+    /*@Override
     public void configureClientInboundChannel(ChannelRegistration registration) {
 
     }
@@ -24,12 +32,12 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     @Override
     public void configureClientOutboundChannel(ChannelRegistration registration) {
 
-    }
+    }*/
 
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         //registry.enableStompBrokerRelay("/topic/**", "/queue/**");
-        registry.enableSimpleBroker("/topic/**", "/queue/**");
-        registry.setApplicationDestinationPrefixes("/app");
+        registry.enableSimpleBroker(webSocketProperties.getTopic(), webSocketProperties.getQueue());
+        registry.setApplicationDestinationPrefixes(webSocketProperties.getAppPrefix());
     }
 }
