@@ -16,5 +16,5 @@ spring:
 websocket:
   endpoint: /ws
   appPrefix: /app
-  topic: /topic/**
-  queue: /queue/**
+  topic: /topic
+  queue: /queue

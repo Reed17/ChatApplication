@@ -43,7 +43,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Transactional
     @Override
-    public void sendMessage(Long chatRoomId, MessageDto message) {
-        simpMessagingTemplate.convertAndSend("/topic/chats." + chatRoomId, message.getContent());
+    public void sendMessage(MessageDto message) {
+        simpMessagingTemplate.convertAndSend("/topic/chats", message);
     }
 }
