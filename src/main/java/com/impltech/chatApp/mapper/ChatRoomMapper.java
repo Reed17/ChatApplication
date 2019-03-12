@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 public class ChatRoomMapper implements BaseMapper<ChatRoom, ChatRoomDto> {
     @Override
     public ChatRoomDto toDto(final ChatRoom entity) {
-        return new ChatRoomDto(entity.getRoomId(), entity.getManager(), entity.getClient(), entity.getRoomMessages());
+        return new ChatRoomDto(entity.getChatRoomId(), entity.getName(), entity.getUsers());
     }
 
     @Override
     public ChatRoom toEntity(final ChatRoomDto dto) {
-        final ChatRoom chatRoom = new ChatRoom(dto.getManager(), dto.getClient(), dto.getRoomMessages());
-        chatRoom.setRoomId(dto.getRoomId());
+        final ChatRoom chatRoom = new ChatRoom(dto.getName(), dto.getUsers());
+        chatRoom.setChatRoomId(dto.getChatRoomId());
         return chatRoom;
     }
 }

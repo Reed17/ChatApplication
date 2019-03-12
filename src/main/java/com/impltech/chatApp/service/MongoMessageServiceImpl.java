@@ -10,10 +10,11 @@ import com.impltech.chatApp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
-public class MessageServiceImpl implements MessageService {
+public class MongoMessageServiceImpl implements MessageService {
 
     private SimpMessagingTemplate simpMessagingTemplate;
     private UserRepository userRepository;
@@ -24,13 +25,13 @@ public class MessageServiceImpl implements MessageService {
     private ChatRoomMapper chatRoomMapper;
 
     @Autowired
-    public MessageServiceImpl(SimpMessagingTemplate simpMessagingTemplate,
-                              UserRepository userRepository,
-                              MessageRepository messageRepository,
-                              ChatRoomRepository chatRoomRepository,
-                              UserMapper userMapper,
-                              MessageMapper messageMapper,
-                              ChatRoomMapper chatRoomMapper) {
+    public MongoMessageServiceImpl(SimpMessagingTemplate simpMessagingTemplate,
+                                   UserRepository userRepository,
+                                   MessageRepository messageRepository,
+                                   ChatRoomRepository chatRoomRepository,
+                                   UserMapper userMapper,
+                                   MessageMapper messageMapper,
+                                   ChatRoomMapper chatRoomMapper) {
         this.simpMessagingTemplate = simpMessagingTemplate;
         this.userRepository = userRepository;
         this.messageRepository = messageRepository;
@@ -41,9 +42,13 @@ public class MessageServiceImpl implements MessageService {
     }
 
 
-    @Transactional
     @Override
-    public void sendMessage(MessageDto message) {
-        simpMessagingTemplate.convertAndSend("/topic/chats", message);
+    public void sendMessageToConversation(MessageDto message) {
+
+    }
+
+    @Override
+    public List<MessageDto> findMessageHistoryFor(String userName, Long chatRoomId) {
+        return null;
     }
 }

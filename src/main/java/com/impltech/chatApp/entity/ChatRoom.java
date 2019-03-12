@@ -1,70 +1,52 @@
 package com.impltech.chatApp.entity;
 
-import javax.persistence.*;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Entity
+@RedisHash(value = "chatrooms")
 public class ChatRoom {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roomId;
+    private Long chatRoomId;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    private User manager;
+    private String name;
 
-    @OneToOne(cascade = CascadeType.MERGE)
-    private User client;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Message> roomMessages = new ArrayList<>();
+    private List<User> users = new ArrayList<>();
 
     public ChatRoom() {
     }
 
-    public ChatRoom(User manager, User client) {
-        this.manager = manager;
-        this.client = client;
+    public ChatRoom(String name, List<User> users) {
+        this.name = name;
+        this.users = users;
     }
 
-    public ChatRoom(User manager, User client, List<Message> roomMessages) {
-        this.manager = manager;
-        this.client = client;
-        this.roomMessages = roomMessages;
+    public Long getChatRoomId() {
+        return chatRoomId;
     }
 
-    public Long getRoomId() {
-        return roomId;
+    public void setChatRoomId(Long chatRoomId) {
+        this.chatRoomId = chatRoomId;
     }
 
-    public void setRoomId(Long roomId) {
-        this.roomId = roomId;
+    public String getName() {
+        return name;
     }
 
-    public User getManager() {
-        return manager;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setManager(User manager) {
-        this.manager = manager;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public User getClient() {
-        return client;
-    }
-
-    public void setClient(User client) {
-        this.client = client;
-    }
-
-    public List<Message> getRoomMessages() {
-        return roomMessages;
-    }
-
-    public void setRoomMessages(List<Message> roomMessages) {
-        this.roomMessages = roomMessages;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
     @Override
@@ -72,21 +54,22 @@ public class ChatRoom {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ChatRoom chatRoom = (ChatRoom) o;
-        return Objects.equals(roomId, chatRoom.roomId);
+        return Objects.equals(chatRoomId, chatRoom.chatRoomId) &&
+                Objects.equals(name, chatRoom.name) &&
+                Objects.equals(users, chatRoom.users);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(roomId);
+        return Objects.hash(chatRoomId, name, users);
     }
 
     @Override
     public String toString() {
         return "ChatRoom{" +
-                "roomId=" + roomId +
-                ", manager=" + manager +
-                ", client=" + client +
-                ", roomMessages=" + roomMessages +
+                "chatRoomId=" + chatRoomId +
+                ", name='" + name + '\'' +
+                ", users=" + users +
                 '}';
     }
 }

@@ -12,9 +12,25 @@ spring:
     username: root
     password: root
     initialization-mode: always
+  data:
+    redis:
+      repositories:
+        enabled: true
+  session:
+    store-type: redis
+  redis:
+    host: localhost
+    port: 6379
 
 websocket:
   endpoint: /ws
-  appPrefix: /app
-  topic: /topic
-  queue: /queue
+  appPrefix: /chatroom
+  topic: /topic/
+  queue: /queue/
+
+app:
+  chat:
+    relay:
+      host: localhost
+      port: 61613
+

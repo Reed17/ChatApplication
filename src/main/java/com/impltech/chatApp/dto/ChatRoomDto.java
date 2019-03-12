@@ -1,62 +1,50 @@
 package com.impltech.chatApp.dto;
 
-import com.impltech.chatApp.entity.Message;
 import com.impltech.chatApp.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ChatRoomDto {
-    private Long roomId;
-    private User manager;
-    private User client;
-    private List<Message> roomMessages = new ArrayList<>();
+    private Long chatRoomId;
+    private String name;
+    private List<User> users = new ArrayList<>();
 
     public ChatRoomDto() {
     }
 
-    public ChatRoomDto(User manager, User client, List<Message> roomMessages) {
-        this.manager = manager;
-        this.client = client;
-        this.roomMessages = roomMessages;
+    public ChatRoomDto(String name, List<User> users) {
+        this.name = name;
+        this.users = users;
     }
 
-    public ChatRoomDto(Long roomId, User manager, User client, List<Message> roomMessages) {
-        this.roomId = roomId;
-        this.manager = manager;
-        this.client = client;
-        this.roomMessages = roomMessages;
+    public ChatRoomDto(Long chatRoomId, String name, List<User> users) {
+        this.chatRoomId = chatRoomId;
+        this.name = name;
+        this.users = users;
     }
 
-    public Long getRoomId() {
-        return roomId;
+    public Long getChatRoomId() {
+        return chatRoomId;
     }
 
-    public void setRoomId(Long roomId) {
-        this.roomId = roomId;
+    public void setChatRoomId(Long chatRoomId) {
+        this.chatRoomId = chatRoomId;
     }
 
-    public User getManager() {
-        return manager;
+    public List<User> getUsers() {
+        return users;
     }
 
-    public void setManager(User manager) {
-        this.manager = manager;
+    public void setUsers(List<User> users) {
+        this.users = users;
     }
 
-    public User getClient() {
-        return client;
+    public String getName() {
+        return name;
     }
 
-    public void setClient(User client) {
-        this.client = client;
-    }
-
-    public List<Message> getRoomMessages() {
-        return roomMessages;
-    }
-
-    public void setRoomMessages(List<Message> roomMessages) {
-        this.roomMessages = roomMessages;
+    public void setName(String name) {
+        this.name = name;
     }
 }
