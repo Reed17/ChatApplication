@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -95,7 +96,8 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
 
     @Override
     public List<ChatRoomDto> getAllChatRoomsList() {
-        return null;
+        List<ChatRoom> chatRooms = (List<ChatRoom>) chatRoomRepository.findAll();
+        return makeChatRoomList(chatRooms);
     }
 
     private Optional<ChatRoom> getByIdInternal(String chatRoomId) {
@@ -120,4 +122,13 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
                 chatRoom.getConnectedUsers());
     }
 
+    private List<ChatRoomDto> makeChatRoomList(List<ChatRoom> chatRooms) {
+        List<ChatRoomDto> dtoList = new ArrayList<>();
+        chatRooms.forEach(room -> {
+            dtoList.add(new ChatRoomDto(
+                    room.getChatRoomId(), room.getName(), room.getConnectedUsers()
+            ));
+        });
+        return dtoList;
+    }
 }

@@ -1,7 +1,6 @@
 package com.impltech.chatApp.service;
 
 import com.impltech.chatApp.entity.Message;
-import com.impltech.chatApp.mapper.MessageMapper;
 import com.impltech.chatApp.repository.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,24 +11,30 @@ import java.util.List;
 public class MongoMessageServiceImpl implements MessageService {
 
     private MessageRepository messageRepository;
-    private MessageMapper messageMapper;
 
     @Autowired
-    public MongoMessageServiceImpl(MessageRepository messageRepository, MessageMapper messageMapper) {
+    public MongoMessageServiceImpl(MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
-        this.messageMapper = messageMapper;
     }
 
     @Override
     public void sendMessageToConversation(Message message) {
-        message.setUsername(message.getFromUser());
-        messageRepository.save(message);
-        message.setUsername(message.getToUser());
-        messageRepository.save(message);
+        setUsernameToMessageObject(message, message.getFromUser());
+        saveMessage(message);
+        setUsernameToMessageObject(message, message.getToUser());
+        saveMessage(message);
     }
 
     @Override
     public List<Message> findMessageHistoryFor(String userName, String chatRoomId) {
         return messageRepository.findMessageByUsernameAndChatRoomId(userName, chatRoomId);
+    }
+
+    private Message saveMessage(Message message) {
+        return messageRepository.save(message);
+    }
+
+    private void setUsernameToMessageObject(Message message, String fromUser) {
+        message.setUsername(fromUser);
     }
 }
