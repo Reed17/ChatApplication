@@ -3,7 +3,7 @@ package com.impltech.chatApp.dto;
 import java.util.Date;
 
 public class MessageDto {
-    private String messageId;
+    private String chatRoomId;
     private String username;
     private Date date;
     private String fromUser;
@@ -20,16 +20,16 @@ public class MessageDto {
         this.content = content;
     }
 
-    public MessageDto(String messageId, Date date, String fromUser, String toUser, String content) {
-        this.messageId = messageId;
+    public MessageDto(String chatRoomId, Date date, String fromUser, String toUser, String content) {
+        this.chatRoomId = chatRoomId;
         this.date = date;
         this.fromUser = fromUser;
         this.toUser = toUser;
         this.content = content;
     }
 
-    public MessageDto(String messageId, String username, Date date, String fromUser, String toUser, String content) {
-        this.messageId = messageId;
+    public MessageDto(String chatRoomId, String username, Date date, String fromUser, String toUser, String content) {
+        this.chatRoomId = chatRoomId;
         this.username = username;
         this.date = date;
         this.fromUser = fromUser;
@@ -37,12 +37,12 @@ public class MessageDto {
         this.content = content;
     }
 
-    public String getMessageId() {
-        return messageId;
+    public String getChatRoomId() {
+        return chatRoomId;
     }
 
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
+    public void setChatRoomId(String chatRoomId) {
+        this.chatRoomId = chatRoomId;
     }
 
     public Date getDate() {
@@ -88,7 +88,7 @@ public class MessageDto {
     @Override
     public String toString() {
         return "MessageDto{" +
-                "messageId=" + messageId +
+                "chatRoomId=" + chatRoomId +
                 ", date=" + date +
                 ", fromUser='" + fromUser + '\'' +
                 ", toUser='" + toUser + '\'' +

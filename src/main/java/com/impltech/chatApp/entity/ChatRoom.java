@@ -15,14 +15,14 @@ public class ChatRoom {
 
     private String name;
 
-    private List<User> users = new ArrayList<>();
+    private List<User> connectedUsers = new ArrayList<>();
 
     public ChatRoom() {
     }
 
-    public ChatRoom(String name, List<User> users) {
+    public ChatRoom(String name, List<User> connectedUsers) {
         this.name = name;
-        this.users = users;
+        this.connectedUsers = connectedUsers;
     }
 
     public String getChatRoomId() {
@@ -41,12 +41,12 @@ public class ChatRoom {
         this.name = name;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<User> getConnectedUsers() {
+        return connectedUsers;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setConnectedUsers(List<User> connectedUsers) {
+        this.connectedUsers = connectedUsers;
     }
 
     @Override
@@ -56,12 +56,12 @@ public class ChatRoom {
         ChatRoom chatRoom = (ChatRoom) o;
         return Objects.equals(chatRoomId, chatRoom.chatRoomId) &&
                 Objects.equals(name, chatRoom.name) &&
-                Objects.equals(users, chatRoom.users);
+                Objects.equals(connectedUsers, chatRoom.connectedUsers);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(chatRoomId, name, users);
+        return Objects.hash(chatRoomId, name, connectedUsers);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class ChatRoom {
         return "ChatRoom{" +
                 "chatRoomId=" + chatRoomId +
                 ", name='" + name + '\'' +
-                ", users=" + users +
+                ", connectedUsers=" + connectedUsers +
                 '}';
     }
 }

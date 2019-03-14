@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Message {
 
     @Id
-    private String messageId;
+    private String chatRoomId;
 
     private String username;
 
@@ -40,12 +40,12 @@ public class Message {
         this.content = content;
     }
 
-    public String getMessageId() {
-        return messageId;
+    public String getChatRoomId() {
+        return chatRoomId;
     }
 
-    public void setMessageId(String messageId) {
-        this.messageId = messageId;
+    public void setChatRoomId(String chatRoomId) {
+        this.chatRoomId = chatRoomId;
     }
 
     public Date getDate() {
@@ -93,7 +93,7 @@ public class Message {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Message message = (Message) o;
-        return Objects.equals(messageId, message.messageId) &&
+        return Objects.equals(chatRoomId, message.chatRoomId) &&
                 Objects.equals(username, message.username) &&
                 Objects.equals(date, message.date) &&
                 Objects.equals(fromUser, message.fromUser) &&
@@ -103,13 +103,13 @@ public class Message {
 
     @Override
     public int hashCode() {
-        return Objects.hash(messageId, username, date, fromUser, toUser, content);
+        return Objects.hash(chatRoomId, username, date, fromUser, toUser, content);
     }
 
     @Override
     public String toString() {
         return "Message{" +
-                "messageId=" + messageId +
+                "chatRoomId=" + chatRoomId +
                 ", username='" + username + '\'' +
                 ", date=" + date +
                 ", fromUser='" + fromUser + '\'' +

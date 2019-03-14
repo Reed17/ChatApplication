@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 public class ChatRoomMapper implements BaseMapper<ChatRoom, ChatRoomDto> {
     @Override
     public ChatRoomDto toDto(final ChatRoom entity) {
-        return new ChatRoomDto(entity.getChatRoomId(), entity.getName(), entity.getUsers());
+        return new ChatRoomDto(entity.getChatRoomId(), entity.getName(), entity.getConnectedUsers());
     }
 
     @Override

@@ -9,7 +9,7 @@ public class MessageMapper implements BaseMapper<Message, MessageDto> {
     @Override
     public MessageDto toDto(final Message entity) {
         final MessageDto dto = new MessageDto(
-                entity.getMessageId(),
+                entity.getChatRoomId(),
                 entity.getDate(),
                 entity.getFromUser(),
                 entity.getToUser(),
@@ -27,7 +27,7 @@ public class MessageMapper implements BaseMapper<Message, MessageDto> {
                 dto.getContent()
         );
         msg.setUsername(dto.getUsername());
-        msg.setMessageId(dto.getMessageId());
+        msg.setChatRoomId(dto.getChatRoomId());
         return msg;
     }
 }

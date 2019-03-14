@@ -1,10 +1,10 @@
 package com.impltech.chatApp.service;
 
-import com.impltech.chatApp.dto.MessageDto;
+import com.impltech.chatApp.entity.Message;
 
 import java.util.List;
 
 public interface MessageService {
-    void sendMessageToConversation(MessageDto message);
-    List<MessageDto> findMessageHistoryFor(String userName, Long chatRoomId);
+    void sendMessageToConversation(Message message);
+    List<Message> findMessageHistoryFor(String userName, String chatRoomId);
 }
