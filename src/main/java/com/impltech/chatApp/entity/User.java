@@ -1,6 +1,7 @@
 package com.impltech.chatApp.entity;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Entity
@@ -16,10 +17,13 @@ public class User {
     @SequenceGenerator(name = "user_gen", sequenceName = "user_id_seq", allocationSize = 1)
     private Long userId;
 
+    @NotBlank
     private String username;
 
+    @NotBlank
     private String email;
 
+    @NotBlank
     private String password;
 
     public User() {

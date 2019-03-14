@@ -3,8 +3,8 @@ package com.impltech.chatApp.dto;
 import java.util.Date;
 
 public class MessageDto {
-    private Long messageId;
-    private  String username;
+    private String messageId;
+    private String username;
     private Date date;
     private String fromUser;
     private String toUser;
@@ -20,7 +20,7 @@ public class MessageDto {
         this.content = content;
     }
 
-    public MessageDto(Long messageId, Date date, String fromUser, String toUser, String content) {
+    public MessageDto(String messageId, Date date, String fromUser, String toUser, String content) {
         this.messageId = messageId;
         this.date = date;
         this.fromUser = fromUser;
@@ -28,7 +28,7 @@ public class MessageDto {
         this.content = content;
     }
 
-    public MessageDto(Long messageId, String username, Date date, String fromUser, String toUser, String content) {
+    public MessageDto(String messageId, String username, Date date, String fromUser, String toUser, String content) {
         this.messageId = messageId;
         this.username = username;
         this.date = date;
@@ -37,11 +37,11 @@ public class MessageDto {
         this.content = content;
     }
 
-    public Long getMessageId() {
+    public String getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(Long messageId) {
+    public void setMessageId(String messageId) {
         this.messageId = messageId;
     }
 

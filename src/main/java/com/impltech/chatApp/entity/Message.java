@@ -1,30 +1,23 @@
 package com.impltech.chatApp.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.annotation.TypeAlias;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.util.Date;
 import java.util.Objects;
 
 @Document(collection = "messages")
-@TypeAlias(value = "message")
 public class Message {
 
     @Id
-    private Long messageId;
+    private String messageId;
 
     private String username;
 
     private Date date;
 
-    @Field(value = "from")
     private String fromUser;
 
-    @Field(value = "to")
     private String toUser;
 
     private String content;
@@ -39,7 +32,6 @@ public class Message {
         this.content = content;
     }
 
-    @PersistenceConstructor
     public Message(String username, Date date, String fromUser, String toUser, String content) {
         this.username = username;
         this.date = date;
@@ -48,11 +40,11 @@ public class Message {
         this.content = content;
     }
 
-    public Long getMessageId() {
+    public String getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(Long messageId) {
+    public void setMessageId(String messageId) {
         this.messageId = messageId;
     }
 

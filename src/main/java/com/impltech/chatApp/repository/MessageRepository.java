@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface MessageRepository extends MongoRepository<Message, Long> {
-    List<Message> findMessagesByUsername(String username, String chatRoomId);
+@Repository
+public interface MessageRepository extends MongoRepository<Message, String> {
 }

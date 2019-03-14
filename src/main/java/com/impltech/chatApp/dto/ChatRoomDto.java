@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatRoomDto {
-    private Long chatRoomId;
+    private String chatRoomId;
     private String name;
     private List<User> users = new ArrayList<>();
 
@@ -18,17 +18,17 @@ public class ChatRoomDto {
         this.users = users;
     }
 
-    public ChatRoomDto(Long chatRoomId, String name, List<User> users) {
+    public ChatRoomDto(String chatRoomId, String name, List<User> users) {
         this.chatRoomId = chatRoomId;
         this.name = name;
         this.users = users;
     }
 
-    public Long getChatRoomId() {
+    public String getChatRoomId() {
         return chatRoomId;
     }
 
-    public void setChatRoomId(Long chatRoomId) {
+    public void setChatRoomId(String chatRoomId) {
         this.chatRoomId = chatRoomId;
     }
 

@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@RedisHash(value = "chatrooms")
+@RedisHash("chatrooms")
 public class ChatRoom {
 
     @Id
-    private Long chatRoomId;
+    private String chatRoomId;
 
     private String name;
 
@@ -25,11 +25,11 @@ public class ChatRoom {
         this.users = users;
     }
 
-    public Long getChatRoomId() {
+    public String getChatRoomId() {
         return chatRoomId;
     }
 
-    public void setChatRoomId(Long chatRoomId) {
+    public void setChatRoomId(String chatRoomId) {
         this.chatRoomId = chatRoomId;
     }
 
