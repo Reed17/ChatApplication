@@ -28,6 +28,7 @@ dependencies {
     def JUnitJupiterVersion = '5.4.0'
     def JUnitPlatformLauncherVersion = '1.4.0'
     def springSessionDataRedisVersion = '2.1.4.RELEASE'
+    def springSecurityTestVersion = '5.1.4.RELEASE'
     def springMessagingVersion = '5.1.5.RELEASE'
     def MySqlVersion = '8.0.15'
     def nettyTransportNativeEpollVersion = '4.1.34.Final'
@@ -42,6 +43,7 @@ dependencies {
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: JUnitJupiterVersion
     testCompile group: 'org.junit.platform', name: 'junit-platform-launcher', version: JUnitPlatformLauncherVersion
     testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+    testCompile group: 'org.springframework.security', name: 'spring-security-test', version: springSecurityTestVersion
 
     compile group: 'org.springframework', name: 'spring-messaging', version: springMessagingVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
@@ -49,6 +51,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springBootVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: springBootVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: springBootVersion
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springBootVersion
     compile group: 'org.springframework.session', name: 'spring-session-data-redis', version: springSessionDataRedisVersion
 
     compile group: 'mysql', name: 'mysql-connector-java', version: MySqlVersion

@@ -1,8 +1,12 @@
 package com.impltech.chatApp.entity;
 
+import com.impltech.chatApp.enums.Role;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(
@@ -25,6 +29,15 @@ public class User {
 
     @NotBlank
     private String password;
+
+    @Enumerated(value = EnumType.STRING)
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "app_user_roles",
+            joinColumns = {
+                    @JoinColumn(name = "user_id")
+            })
+    private Set<Role> roles = new HashSet<>();
 
     public User() {
     }
@@ -65,6 +78,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
