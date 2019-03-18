@@ -28,6 +28,7 @@ dependencies {
     def JUnitJupiterVersion = '5.4.0'
     def JUnitPlatformLauncherVersion = '1.4.0'
     def springSessionDataRedisVersion = '2.1.4.RELEASE'
+    def springSecurityMessagingVersion = '5.1.4.RELEASE'
     def springSecurityTestVersion = '5.1.4.RELEASE'
     def springMessagingVersion = '5.1.5.RELEASE'
     def MySqlVersion = '8.0.15'
@@ -52,6 +53,7 @@ dependencies {
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-websocket', version: springBootVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-mongodb', version: springBootVersion
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-security', version: springBootVersion
+    compile group: 'org.springframework.security', name: 'spring-security-messaging', version: springSecurityMessagingVersion
     compile group: 'org.springframework.session', name: 'spring-session-data-redis', version: springSessionDataRedisVersion
 
     compile group: 'mysql', name: 'mysql-connector-java', version: MySqlVersion

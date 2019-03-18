@@ -41,6 +41,14 @@ public class UserPrincipal implements UserDetails {
         );
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;

@@ -1,6 +1,6 @@
 package com.impltech.chatApp.utils;
 
-public class Destination {
+public class DestinationUtil {
 
     public static String chatRoomMessages(String chatRoomId) {
         return "/queue/" + chatRoomId + ".messages";

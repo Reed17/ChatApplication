@@ -1,7 +1,6 @@
-package com.impltech.chatApp.service;
+package com.impltech.chatApp.service.impl;
 
 import com.impltech.chatApp.dto.ChatRoomDto;
-import com.impltech.chatApp.dto.MessageDto;
 import com.impltech.chatApp.dto.UserDto;
 import com.impltech.chatApp.entity.ChatRoom;
 import com.impltech.chatApp.entity.Message;
@@ -9,7 +8,9 @@ import com.impltech.chatApp.entity.User;
 import com.impltech.chatApp.mapper.ChatRoomMapper;
 import com.impltech.chatApp.mapper.UserMapper;
 import com.impltech.chatApp.repository.ChatRoomRepository;
-import com.impltech.chatApp.utils.Destination;
+import com.impltech.chatApp.service.ChatRoomService;
+import com.impltech.chatApp.service.MessageService;
+import com.impltech.chatApp.utils.DestinationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
@@ -84,13 +85,13 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
         // todo send message to user
         webSocketMessagingTemplate.convertAndSendToUser(
                 message.getToUser(),
-                Destination.chatRoomMessages(message.getChatRoomId()),
+                DestinationUtil.chatRoomMessages(message.getChatRoomId()),
                 message
         );
         // todo send message from user
         webSocketMessagingTemplate.convertAndSendToUser(
                 message.getFromUser(),
-                Destination.chatRoomMessages(message.getChatRoomId()),
+                DestinationUtil.chatRoomMessages(message.getChatRoomId()),
                 message);
     }
 
@@ -118,7 +119,7 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
 
     private void updateConnectedUsersViaWebSocket(ChatRoom chatRoom) {
         webSocketMessagingTemplate.convertAndSend(
-                Destination.chatRoomConnectedUsers(chatRoom.getChatRoomId()),
+                DestinationUtil.chatRoomConnectedUsers(chatRoom.getChatRoomId()),
                 chatRoom.getConnectedUsers());
     }
 

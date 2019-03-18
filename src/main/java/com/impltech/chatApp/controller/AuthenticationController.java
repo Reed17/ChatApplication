@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthenticationController {
@@ -23,13 +25,12 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.signUp(signUpRequest));
+    public ResponseEntity<?> signUp(@RequestBody SignUpRequest signUpRequest, HttpServletResponse response) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.signUp(signUpRequest, response));
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signIn(@RequestBody LoginRequest loginRequest) {
-        return ResponseEntity.ok().body(authenticationService.signIn(loginRequest));
-
+    public ResponseEntity<?> signIn(@RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+        return ResponseEntity.ok().body(authenticationService.signIn(loginRequest, response));
     }
 }

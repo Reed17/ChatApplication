@@ -1,4 +1,4 @@
-package com.impltech.chatApp.service;
+package com.impltech.chatApp.service.impl;
 
 import com.impltech.chatApp.dto.UserDto;
 import com.impltech.chatApp.entity.User;
@@ -8,6 +8,7 @@ import com.impltech.chatApp.exceptions.InvalidUsernameException;
 import com.impltech.chatApp.exceptions.UserNotFoundException;
 import com.impltech.chatApp.mapper.UserMapper;
 import com.impltech.chatApp.repository.UserRepository;
+import com.impltech.chatApp.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

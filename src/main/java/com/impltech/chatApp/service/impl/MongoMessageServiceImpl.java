@@ -1,7 +1,8 @@
-package com.impltech.chatApp.service;
+package com.impltech.chatApp.service.impl;
 
 import com.impltech.chatApp.entity.Message;
 import com.impltech.chatApp.repository.MessageRepository;
+import com.impltech.chatApp.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -12,13 +12,13 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 @Configuration
 @EnableScheduling
 @EnableWebSocketMessageBroker
-public class WebSocketConfiguration extends AbstractSessionWebSocketMessageBrokerConfigurer<Session> {
+public class WebSocketSessionConfiguration extends AbstractSessionWebSocketMessageBrokerConfigurer<Session> {
 
     private WebSocketProperties webSocketProperties;
     private ChatRelayProperties chatRelayProperties;
 
     @Autowired
-    public WebSocketConfiguration(WebSocketProperties webSocketProperties, ChatRelayProperties chatRelayProperties) {
+    public WebSocketSessionConfiguration(WebSocketProperties webSocketProperties, ChatRelayProperties chatRelayProperties) {
         this.webSocketProperties = webSocketProperties;
         this.chatRelayProperties = chatRelayProperties;
     }
