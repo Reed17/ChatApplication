@@ -21,10 +21,14 @@ spring:
     redis:
       repositories:
         enabled: true
+  messages:
+    cache-duration: 0
+
 server:
   servlet:
     session:
       timeout: 1m
+
 websocket:
   endpoint: /ws
   appPrefix: /chatroom

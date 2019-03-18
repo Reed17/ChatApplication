@@ -3,6 +3,9 @@ package com.impltech.chatApp.service;
 import com.impltech.chatApp.dto.UserDto;
 import com.impltech.chatApp.entity.User;
 import com.impltech.chatApp.enums.Role;
+import com.impltech.chatApp.exceptions.InvalidEmailException;
+import com.impltech.chatApp.exceptions.InvalidUsernameException;
+import com.impltech.chatApp.exceptions.UserNotFoundException;
 import com.impltech.chatApp.mapper.UserMapper;
 import com.impltech.chatApp.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,28 +30,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto findByEmail(String email) {
-        return null;
+    public User findByEmail(String email) {
+        if (!userRepository.existsByEmail(email)) {
+            throw new UserNotFoundException("User doesn't exists!");
+        }
+        return userRepository.findByEmail(email);
     }
 
     @Override
     public Optional<User> findById(Long userId) {
-        return Optional.empty();
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException("User not found!");
+        }
+        return userRepository.findById(userId);
     }
 
     @Override
     public Optional<User> findByUsername(String username) {
-        return Optional.empty();
+        if (!userRepository.existsByUsername(username)) {
+            throw new UserNotFoundException("User not found!");
+        }
+        return userRepository.findByUsername(username);
     }
 
     @Override
     public Boolean existsByUsername(String username) {
-        return null;
+        if (username == null || username.isEmpty()) {
+            throw new InvalidUsernameException("Invalid or empty username!");
+        }
+        return userRepository.existsByUsername(username);
     }
 
     @Override
     public Boolean existsByEmail(String email) {
-        return null;
+        if (email == null || email.isEmpty()) {
+            throw new InvalidEmailException("Invalid or empty email!");
+        }
+        return userRepository.existsByEmail(email);
     }
 
     @Override
@@ -61,6 +79,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long userId) {
+        if (!userRepository.existsById(userId)) {
+            throw new UserNotFoundException("User not found!");
+        }
         userRepository.deleteById(userId);
     }
 }

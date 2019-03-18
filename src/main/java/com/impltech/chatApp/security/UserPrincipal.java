@@ -19,7 +19,7 @@ public class UserPrincipal implements UserDetails {
     private transient String password;
     private Set<? extends GrantedAuthority> authorities = new HashSet<>();
 
-    private UserPrincipal(Long userId, String username, String email, String password, Set<? extends GrantedAuthority> authorities) {
+    public UserPrincipal(Long userId, String username, String email, String password, Set<? extends GrantedAuthority> authorities) {
         this.userId = userId;
         this.username = username;
         this.email = email;
@@ -30,7 +30,7 @@ public class UserPrincipal implements UserDetails {
     public static UserPrincipal create(User user) {
         Set<GrantedAuthority> userAuthorities = user.getRoles()
                 .stream()
-                .map(role -> new SimpleGrantedAuthority(Role.USER.getName()))
+                .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toSet());
         return new UserPrincipal(
                 user.getUserId(),

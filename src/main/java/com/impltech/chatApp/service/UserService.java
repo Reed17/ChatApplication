@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    UserDto findByEmail(final String email);
+    User findByEmail(final String email);
 
     Optional<User> findById(final Long userId);
 
