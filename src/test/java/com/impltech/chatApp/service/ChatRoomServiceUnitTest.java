@@ -197,6 +197,7 @@ public class ChatRoomServiceUnitTest {
                 messageObjectCaptor.capture());
         verify(messageService, times(1)).sendMessageToConversation(message);
 
+        // TODO finish this test
         List<String> toUsers = toUserCaptor.getAllValues();
         List<String> destinations = destinationCaptor.getAllValues();
         List<Object> messageObjects = messageObjectCaptor.getAllValues();
