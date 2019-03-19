@@ -39,7 +39,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final UserPrincipal userPrincipal = UserPrincipal.create(newUser);
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-        response.setHeader("Authorization", authToken.toString());
+        SecurityContextHolder.getContext().setAuthentication(authToken);
+        System.out.println(authToken);
+        //response.setHeader("Authorization", "Basic " + );
         return new SignUpResponse(
                 signUpRequest.getEmail(),
                 signUpRequest.getUsername(),
@@ -54,8 +56,8 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         Authentication authentication =
                 authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-        response.setHeader("Authorization", authToken.toString());
+        //UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+        //response.setHeader("Authorization", authToken.toString());
         return new LoginResponse(loginRequest.getEmail(), new Date());
     }
 }
