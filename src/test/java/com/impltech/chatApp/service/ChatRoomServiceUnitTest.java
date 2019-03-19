@@ -130,4 +130,47 @@ public class ChatRoomServiceUnitTest {
                 messageObjectCaptor.capture());
         assertThat(roomWithOneUser.getConnectedUsers().contains(joiningUser), is(true));
     }
+
+    @Test
+    void whenUserLeaveChatRoomThenOperationIsSuccessful() {
+
+        User userInRoom = new User();
+        userInRoom.setUserId(1L);
+        userInRoom.setUsername("John");
+        userInRoom.setEmail("John@mail.ru");
+        userInRoom.setPassword("0oklp9ij");
+
+        ChatRoomDto dto = new ChatRoomDto();
+        dto.setChatRoomId("2wesdss");
+        dto.setName("leaving room");
+        dto.setUsers(Collections.singletonList(userInRoom));
+
+        assertThat(dto.getUsers().size(), is(1));
+
+        UserDto leavingUser = new UserDto(1L, userInRoom.getUsername(), userInRoom.getEmail(), userInRoom.getPassword());
+
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.setChatRoomId(dto.getChatRoomId());
+        chatRoom.setName(dto.getName());
+        chatRoom.setConnectedUsers(dto.getUsers());
+
+        ChatRoom forReturn = new ChatRoom();
+        forReturn.setChatRoomId(dto.getChatRoomId());
+        forReturn.setName(dto.getName());
+
+        when(chatRoomRepository.findById(eq(dto.getChatRoomId()))).thenReturn(Optional.of(forReturn));
+        when(chatRoomRepository.save(any(ChatRoom.class))).thenReturn(forReturn);
+
+        chatRoomService.leave(leavingUser, dto);
+
+        assertThat(forReturn.getConnectedUsers().size(), is(0));
+        verify(chatRoomRepository, times(1)).save(forReturn);
+        verify(simpMessagingTemplate, times(1)).convertAndSend(
+                destinationCaptor.capture(),
+                messageCaptor.capture()
+        );
+        assertThat(forReturn.getConnectedUsers().contains(leavingUser), is(false));
+    }
+
+
 }
