@@ -40,7 +40,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
-        System.out.println(authToken);
         //response.setHeader("Authorization", "Basic " + );
         return new SignUpResponse(
                 signUpRequest.getEmail(),

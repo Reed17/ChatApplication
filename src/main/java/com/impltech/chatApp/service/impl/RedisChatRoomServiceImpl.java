@@ -28,6 +28,9 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
     private ChatRoomMapper roomMapper;
     private UserMapper userMapper;
 
+    public RedisChatRoomServiceImpl() {
+    }
+
     @Autowired
     public RedisChatRoomServiceImpl(
             SimpMessagingTemplate webSocketMessagingTemplate,
