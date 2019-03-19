@@ -96,6 +96,8 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
                 message.getFromUser(),
                 DestinationUtil.chatRoomMessages(message.getChatRoomId()),
                 message);
+        // todo append this message to conversation
+        messageService.sendMessageToConversation(message);
     }
 
     @Override

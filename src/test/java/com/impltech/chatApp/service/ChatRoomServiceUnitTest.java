@@ -17,8 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 
-import java.util.Collections;
-import java.util.Optional;
+import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
@@ -172,5 +171,47 @@ public class ChatRoomServiceUnitTest {
         assertThat(forReturn.getConnectedUsers().contains(leavingUser), is(false));
     }
 
+    @Test
+    void whenUsersSendMessagesWithinChatRoomThanOperationIsSuccessful() {
+        User client = new User("client", "client@gmail.com", "1qazxsw2");
+        client.setUserId(1L);
+        User manager = new User("manager", "manager@gmail.com", "0oplkmn");
+        manager.setUserId(2L);
 
+        ChatRoom chatRoom = new ChatRoom("live conversation", Arrays.asList(client, manager));
+        chatRoom.setChatRoomId("id_1");
+        assertThat(chatRoom.getConnectedUsers().size(), is(2));
+
+        Message message = new Message();
+        message.setChatRoomId(chatRoom.getChatRoomId());
+        message.setFromUser(client.getUsername());
+        message.setToUser(manager.getUsername());
+        message.setContent("Hi!I have some problems with Builder pattern... Can you help me to learn it?");
+        message.setDate(new Date());
+
+        chatRoomService.sendMessage(message);
+
+        verify(simpMessagingTemplate, times(2)).convertAndSendToUser(
+                toUserCaptor.capture(),
+                destinationCaptor.capture(),
+                messageObjectCaptor.capture());
+        verify(messageService, times(1)).sendMessageToConversation(message);
+
+        List<String> toUsers = toUserCaptor.getAllValues();
+        List<String> destinations = destinationCaptor.getAllValues();
+        List<Object> messageObjects = messageObjectCaptor.getAllValues();
+
+        String messageSentToManager = toUsers.get(0);
+        String messageSentToClient = toUsers.get(1);
+        System.out.println(messageSentToManager + ", client = " + messageSentToClient);
+
+
+        String firstDestination = destinations.get(0);
+        String secondDestination = destinations.get(1);
+        System.out.println(firstDestination + ", " + secondDestination);
+
+        Message toManagerMessageObject = (Message) messageObjects.get(0);
+        Message toClientMessageObject = (Message) messageObjects.get(1);
+        System.out.println(toManagerMessageObject + ", to client = " + toClientMessageObject);
+    }
 }
