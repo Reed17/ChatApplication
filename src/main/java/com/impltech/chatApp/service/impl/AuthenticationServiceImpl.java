@@ -35,7 +35,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                         signUpRequest.getEmail(),
                         signUpRequest.getPassword()));
         User newUser = userService.findByEmail(signUpRequest.getEmail());
-        System.out.println(newUser.getRoles());
         final UserPrincipal userPrincipal = UserPrincipal.create(newUser);
         UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());

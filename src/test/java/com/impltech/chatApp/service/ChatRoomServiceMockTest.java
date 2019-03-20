@@ -9,6 +9,7 @@ import com.impltech.chatApp.mapper.ChatRoomMapper;
 import com.impltech.chatApp.mapper.UserMapper;
 import com.impltech.chatApp.repository.ChatRoomRepository;
 import com.impltech.chatApp.service.impl.RedisChatRoomServiceImpl;
+import com.impltech.chatApp.utils.DestinationUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
@@ -21,11 +22,12 @@ import java.util.*;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 
 @ExtendWith(MockitoExtension.class)
-public class ChatRoomServiceUnitTest {
+public class ChatRoomServiceMockTest {
 
     @Mock
     private SimpMessagingTemplate simpMessagingTemplate;
@@ -197,22 +199,25 @@ public class ChatRoomServiceUnitTest {
                 messageObjectCaptor.capture());
         verify(messageService, times(1)).sendMessageToConversation(message);
 
-        // TODO finish this test
         List<String> toUsers = toUserCaptor.getAllValues();
         List<String> destinations = destinationCaptor.getAllValues();
         List<Object> messageObjects = messageObjectCaptor.getAllValues();
 
         String messageSentToManager = toUsers.get(0);
         String messageSentToClient = toUsers.get(1);
-        System.out.println(messageSentToManager + ", client = " + messageSentToClient);
 
-
-        String firstDestination = destinations.get(0);
-        String secondDestination = destinations.get(1);
-        System.out.println(firstDestination + ", " + secondDestination);
+        String clientDestination = destinations.get(0);
+        String managerDestination = destinations.get(1);
 
         Message toManagerMessageObject = (Message) messageObjects.get(0);
         Message toClientMessageObject = (Message) messageObjects.get(1);
-        System.out.println(toManagerMessageObject + ", to client = " + toClientMessageObject);
+
+        assertThat(clientDestination, is(DestinationUtil.chatRoomMessages(chatRoom.getChatRoomId())));
+        assertEquals(message, toManagerMessageObject);
+        assertThat(messageSentToManager, is(manager.getUsername()));
+
+        assertThat(managerDestination, is(DestinationUtil.chatRoomMessages(chatRoom.getChatRoomId())));
+        assertEquals(message, toClientMessageObject);
+        assertThat(messageSentToClient, is(client.getUsername()));
     }
 }

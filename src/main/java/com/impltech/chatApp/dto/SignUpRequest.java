@@ -1,8 +1,17 @@
 package com.impltech.chatApp.dto;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
 public class SignUpRequest {
+    @Email
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String username;
+
+    @NotBlank
     private String password;
 
     public SignUpRequest() {
