@@ -8,20 +8,20 @@ import java.util.List;
 public class ChatRoomDto {
     private String chatRoomId;
     private String name;
-    private List<User> users = new ArrayList<>();
+    private List<User> connectedUsers = new ArrayList<>();
 
     public ChatRoomDto() {
     }
 
-    public ChatRoomDto(String name, List<User> users) {
+    public ChatRoomDto(String name, List<User> connectedUsers) {
         this.name = name;
-        this.users = users;
+        this.connectedUsers = connectedUsers;
     }
 
-    public ChatRoomDto(String chatRoomId, String name, List<User> users) {
+    public ChatRoomDto(String chatRoomId, String name, List<User> connectedUsers) {
         this.chatRoomId = chatRoomId;
         this.name = name;
-        this.users = users;
+        this.connectedUsers = connectedUsers;
     }
 
     public String getChatRoomId() {
@@ -32,12 +32,12 @@ public class ChatRoomDto {
         this.chatRoomId = chatRoomId;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public List<User> getConnectedUsers() {
+        return connectedUsers;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setConnectedUsers(List<User> connectedUsers) {
+        this.connectedUsers = connectedUsers;
     }
 
     public String getName() {

@@ -13,7 +13,7 @@ public class ChatRoomMapper implements BaseMapper<ChatRoom, ChatRoomDto> {
 
     @Override
     public ChatRoom toEntity(final ChatRoomDto dto) {
-        final ChatRoom chatRoom = new ChatRoom(dto.getName(), dto.getUsers());
+        final ChatRoom chatRoom = new ChatRoom(dto.getName(), dto.getConnectedUsers());
         chatRoom.setChatRoomId(dto.getChatRoomId());
         return chatRoom;
     }

@@ -23,6 +23,7 @@ import java.util.Optional;
 public class RedisChatRoomServiceImpl implements ChatRoomService {
 
     private SimpMessagingTemplate webSocketMessagingTemplate;
+
     private MessageService messageService;
     private ChatRoomRepository chatRoomRepository;
     private ChatRoomMapper roomMapper;
@@ -91,6 +92,8 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
                 DestinationUtil.chatRoomMessages(message.getChatRoomId()),
                 message
         );
+        // todo save toUser message story
+        messageService.sendMessageToConversation(message);
         // todo send message from user
         webSocketMessagingTemplate.convertAndSendToUser(
                 message.getFromUser(),

@@ -51,7 +51,7 @@ public class ChatRoomController {
     @SubscribeMapping("/connected.users")
     public List<User> listChatRoomConnectedUsersOnSubscribe(SimpMessageHeaderAccessor headerAccessor) {
         String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
-        return chatRoomService.getById(chatRoomId).getUsers();
+        return chatRoomService.getById(chatRoomId).getConnectedUsers();
     }
 
     @SubscribeMapping("/old.messages")

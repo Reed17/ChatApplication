@@ -106,7 +106,7 @@ public class ChatRoomServiceMockTest {
         chatRoomDto.setName("joining room");
         UserDto dto = new UserDto("test", "test@gmail.com", "1qazxsw2");
 
-        assertThat(chatRoomDto.getUsers().size(), is(0));
+        assertThat(chatRoomDto.getConnectedUsers().size(), is(0));
 
         ChatRoom roomWithOneUser = new ChatRoom();
         roomWithOneUser.setChatRoomId("1qaswed");
@@ -144,16 +144,16 @@ public class ChatRoomServiceMockTest {
         ChatRoomDto dto = new ChatRoomDto();
         dto.setChatRoomId("2wesdss");
         dto.setName("leaving room");
-        dto.setUsers(Collections.singletonList(userInRoom));
+        dto.setConnectedUsers(Collections.singletonList(userInRoom));
 
-        assertThat(dto.getUsers().size(), is(1));
+        assertThat(dto.getConnectedUsers().size(), is(1));
 
         UserDto leavingUser = new UserDto(1L, userInRoom.getUsername(), userInRoom.getEmail(), userInRoom.getPassword());
 
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.setChatRoomId(dto.getChatRoomId());
         chatRoom.setName(dto.getName());
-        chatRoom.setConnectedUsers(dto.getUsers());
+        chatRoom.setConnectedUsers(dto.getConnectedUsers());
 
         ChatRoom forReturn = new ChatRoom();
         forReturn.setChatRoomId(dto.getChatRoomId());
