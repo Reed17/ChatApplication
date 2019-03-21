@@ -76,7 +76,6 @@ public class ChatRoomServiceMockTest {
                 return room;
             }
         });
-        //when(chatRoomMapper.toDto(newChatRoom)).thenReturn(dto);
 
         chatRoomService.save(dto);
         Mockito.verify(chatRoomRepository, Mockito.times(1)).save(newChatRoom);

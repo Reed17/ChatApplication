@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -63,6 +64,7 @@ public class MongoMessageServiceUnitTest {
     @AfterEach
     void tearDown() {
         this.chatRoomRepository.deleteAll();
+        this.messageRepository.deleteAll();
     }
 
     @Test
@@ -74,46 +76,52 @@ public class MongoMessageServiceUnitTest {
         ChatRoom actualRoom = chatRoomWrapper.get();
         ChatRoomDto emptyRoom = chatRoomMapper.toDto(actualRoom);
 
-        ChatRoomDto clientJoined = chatRoomService.join(client, emptyRoom);
-        ChatRoomDto managerJoined = chatRoomService.join(manager, clientJoined);
+        ChatRoomDto clientJoined = joinToRoom(client, emptyRoom);
+        ChatRoomDto managerJoined = joinToRoom(manager, clientJoined);
 
         assertThat(managerJoined.getConnectedUsers().size(), is(2));
 
-        Message questionToManager = new Message(
+        Message questionToManager = getQuestionToManager(client, manager);
+        questionToManager.setChatRoomId(managerJoined.getChatRoomId());
+        chatRoomService.sendMessage(questionToManager);
+
+        List<Message> managerMessages = getMessageHistoryFor(manager, managerJoined);
+
+        assertThat(managerMessages.size(), is(1));
+        assertEquals(manager.getUsername(), managerMessages.get(0).getUsername());
+
+        Message replyToClient = getReplyToClient(client, manager);
+        replyToClient.setChatRoomId(managerJoined.getChatRoomId());
+        chatRoomService.sendMessage(replyToClient);
+
+        List<Message> clientMessages = getMessageHistoryFor(client, managerJoined);
+
+        assertThat(clientMessages.size(), is(1));
+        assertEquals(client.getUsername(), clientMessages.get(0).getUsername());
+    }
+
+    private ChatRoomDto joinToRoom(UserDto client, ChatRoomDto emptyRoom) {
+        return chatRoomService.join(client, emptyRoom);
+    }
+
+    private List<Message> getMessageHistoryFor(UserDto manager, ChatRoomDto managerJoined) {
+        return messageService.findMessageHistoryFor(manager.getUsername(), managerJoined.getChatRoomId());
+    }
+
+    private Message getQuestionToManager(UserDto client, UserDto manager) {
+        return new Message(
                 new Date(),
                 client.getUsername(),
                 manager.getUsername(),
                 "Hi! My name is super client! I have few question about the pharmacy.");
-        //questionToManager.setUsername(client.getUsername());
-        questionToManager.setChatRoomId(managerJoined.getChatRoomId());
-        chatRoomService.sendMessage(questionToManager);
+    }
 
-        List<Message> managerMessages = messageService.findMessageHistoryFor(manager.getUsername(), managerJoined.getChatRoomId());
-        System.out.println(managerMessages);
-        assertThat(managerMessages.size(), is(1));
-
-        Message replyToClient = new Message(
+    private Message getReplyToClient(UserDto client, UserDto manager) {
+        return new Message(
                 manager.getUsername(),
                 new Date(),
                 manager.getUsername(),
                 client.getUsername(),
                 "Hi super client! Let`s start!");
-        replyToClient.setChatRoomId(managerJoined.getChatRoomId());
-        chatRoomService.sendMessage(replyToClient);
-
-        List<Message> clientMessages = messageService.findMessageHistoryFor(client.getUsername(), managerJoined.getChatRoomId());
-        System.out.println(clientMessages);
-
-        assertThat(clientMessages.size(), is(1));
-
-        Message firstReplyToManager = new Message(new Date(), client.getUsername(), manager.getUsername(), "Very well! My question is, how much is that medicine cost?");
-        chatRoomService.sendMessage(firstReplyToManager);
-
-        List<Message> managerMsgHistoryShouldBeUpdated = messageService.findMessageHistoryFor(manager.getUsername(), managerJoined.getChatRoomId());
-        System.out.println(managerMsgHistoryShouldBeUpdated);
-
-        List<Message> all = messageRepository.findAll();
-        System.out.println(all);
-
     }
 }
