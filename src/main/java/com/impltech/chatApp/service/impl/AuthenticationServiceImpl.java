@@ -2,9 +2,12 @@ package com.impltech.chatApp.service.impl;
 
 import com.impltech.chatApp.dto.*;
 import com.impltech.chatApp.entity.User;
+import com.impltech.chatApp.exceptions.UserAlreadyExistsException;
 import com.impltech.chatApp.security.UserPrincipal;
 import com.impltech.chatApp.service.AuthenticationService;
 import com.impltech.chatApp.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,6 +21,8 @@ import java.util.Date;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
+    private static final Logger LOG = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
 
@@ -30,7 +35,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     @Override
     public SignUpResponse signUp(final SignUpRequest signUpRequest, final HttpServletResponse response) {
         // todo exception handling
-
+        if (userService.existsByEmail(signUpRequest.getEmail())) {
+            final String message = "User with this email already exists!";
+            LOG.error(message);
+            throw new UserAlreadyExistsException(message);
+        }
         userService.addNewUser(
                 new UserDto(
                         signUpRequest.getUsername(),

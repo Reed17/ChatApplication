@@ -39,6 +39,7 @@ dependencies {
     def reactorNetVersion = '2.0.8.RELEASE'
     def reactorNettyVersion = '0.8.5.RELEASE'
     def mockitoJunitJupiterVersion = '2.25.1'
+    def jsonSimpleVersion = '1.1.1'
 
     testCompile group: 'junit', name: 'junit', version: JUnit4Version
     testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: JUnitJupiterVersion
@@ -67,5 +68,5 @@ dependencies {
     compile group: 'io.projectreactor', name: 'reactor-net', version: reactorNetVersion
     compile group: 'io.projectreactor.netty', name: 'reactor-netty', version: reactorNettyVersion
 
-
+    compile group: 'com.googlecode.json-simple', name: 'json-simple', version: jsonSimpleVersion
 }

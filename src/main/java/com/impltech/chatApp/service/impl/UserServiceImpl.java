@@ -62,7 +62,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto addNewUser(final UserDto userDto) {
-        isUserAlreadyExists(userRepository.existsByEmail(userDto.getEmail()));
         userDto.setPassword(this.passwordEncoder.encode(userDto.getPassword()));
         userDto.setRoles(Collections.singleton(Role.USER));
         final User user = userRepository.save(userMapper.toEntity(userDto));

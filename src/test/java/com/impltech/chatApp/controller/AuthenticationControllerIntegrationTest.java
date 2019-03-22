@@ -3,9 +3,12 @@ package com.impltech.chatApp.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.impltech.chatApp.dto.LoginRequest;
 import com.impltech.chatApp.dto.SignUpRequest;
+import com.impltech.chatApp.utils.JsonReadingUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.skyscreamer.jsonassert.JSONAssert;
+import org.skyscreamer.jsonassert.JSONCompareMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -32,6 +35,9 @@ public class AuthenticationControllerIntegrationTest {
 
     private static final String API_AUTH_SIGNUP = "/api/auth/signup";
     private static final String API_AUTH_SIGNIN = "/api/auth/signin";
+
+    private static final String USER_ALREADY_EXISTS_EXCEPTION_RESPONSE_JSON = "json/user-already-exists-exception-response.json";
+    private static final String USER_NOT_FOUND_EXCEPTION_RESPONSE_JSON = "json/user-not-found-exception-response.json";
 
     @Autowired
     private WebApplicationContext wac;
@@ -66,7 +72,24 @@ public class AuthenticationControllerIntegrationTest {
                 .andExpect(jsonPath("$.username", is("test")));
     }
 
-    // todo add test existed user tries to register with the same credentials
+    @Test
+    void whenRegisteredUserTriesToSignUpWithTheSameCredentialsThenReturnStatusIs() throws Exception {
+        SignUpRequest signUpRequest = new SignUpRequest("John@gmail.com", "John", "1qazxsw2");
+
+        this.mockMvc.perform(post(API_AUTH_SIGNUP)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(signUpRequest)));
+
+        String response = this.mockMvc.perform(post(API_AUTH_SIGNUP)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(this.objectMapper.writeValueAsString(signUpRequest)))
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        String expected = JsonReadingUtil.readFile(USER_ALREADY_EXISTS_EXCEPTION_RESPONSE_JSON).toString();
+        JSONAssert.assertEquals(expected, response, JSONCompareMode.LENIENT);
+    }
 
     @Test
     void whenRegisteredUserTryToSignInThenReturnStatusIsOk() throws Exception {
@@ -84,10 +107,14 @@ public class AuthenticationControllerIntegrationTest {
     void whenUnregisteredUserTriesToSignInThenReturnStatusIsNotFound() throws Exception {
         LoginRequest loginRequest = new LoginRequest("unexisted@gmail.com", "password");
 
-        this.mockMvc.perform(post(API_AUTH_SIGNIN)
+        String response = this.mockMvc.perform(post(API_AUTH_SIGNIN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(status().isNotFound());
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        String expected = JsonReadingUtil.readFile(USER_NOT_FOUND_EXCEPTION_RESPONSE_JSON).toString();
+        JSONAssert.assertEquals(expected, response, JSONCompareMode.LENIENT);
     }
 
     private void registerNewUser() throws Exception {
