@@ -66,6 +66,8 @@ public class AuthenticationControllerIntegrationTest {
                 .andExpect(jsonPath("$.username", is("test")));
     }
 
+    // todo add test existed user tries to register with the same credentials
+
     @Test
     void whenRegisteredUserTryToSignInThenReturnStatusIsOk() throws Exception {
         registerNewUser();
@@ -79,13 +81,13 @@ public class AuthenticationControllerIntegrationTest {
     }
 
     @Test
-    void whenUnregisteredUserTriesToSignInThenReturnStatusIsUnauthorized() throws Exception {
+    void whenUnregisteredUserTriesToSignInThenReturnStatusIsNotFound() throws Exception {
         LoginRequest loginRequest = new LoginRequest("unexisted@gmail.com", "password");
 
         this.mockMvc.perform(post(API_AUTH_SIGNIN)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(loginRequest)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isNotFound());
     }
 
     private void registerNewUser() throws Exception {

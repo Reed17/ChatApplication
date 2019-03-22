@@ -5,6 +5,6 @@ import com.impltech.chatApp.entity.Message;
 import java.util.List;
 
 public interface MessageService {
-    void sendMessageToConversation(Message message);
-    List<Message> findMessageHistoryFor(String userName, String chatRoomId);
+    void sendMessageToConversation(final Message message);
+    List<Message> findMessageHistoryFor(final String userName, final String chatRoomId);
 }

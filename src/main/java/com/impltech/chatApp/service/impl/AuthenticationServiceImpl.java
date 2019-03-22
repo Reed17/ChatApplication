@@ -18,28 +18,29 @@ import java.util.Date;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private UserService userService;
-    private AuthenticationManager authenticationManager;
+    private final UserService userService;
+    private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthenticationServiceImpl(UserService userService, AuthenticationManager authenticationManager) {
+    public AuthenticationServiceImpl(final UserService userService, final AuthenticationManager authenticationManager) {
         this.userService = userService;
         this.authenticationManager = authenticationManager;
     }
 
     @Override
-    public SignUpResponse signUp(SignUpRequest signUpRequest, HttpServletResponse response) {
+    public SignUpResponse signUp(final SignUpRequest signUpRequest, final HttpServletResponse response) {
+        // todo exception handling
+
         userService.addNewUser(
                 new UserDto(
                         signUpRequest.getUsername(),
                         signUpRequest.getEmail(),
                         signUpRequest.getPassword()));
-        User newUser = userService.findByEmail(signUpRequest.getEmail());
+        final User newUser = userService.findByEmail(signUpRequest.getEmail());
         final UserPrincipal userPrincipal = UserPrincipal.create(newUser);
-        UsernamePasswordAuthenticationToken authToken =
+        final UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authToken);
-        //response.setHeader("Authorization", "Basic " + );
         return new SignUpResponse(
                 signUpRequest.getEmail(),
                 signUpRequest.getUsername(),
@@ -48,14 +49,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public LoginResponse signIn(LoginRequest loginRequest, HttpServletResponse response) {
-        UsernamePasswordAuthenticationToken authToken =
+    public LoginResponse signIn(final LoginRequest loginRequest, final HttpServletResponse response) {
+        // todo exception handling
+        final UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
-        Authentication authentication =
+        final Authentication authentication =
                 authenticationManager.authenticate(authToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        //UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
-        //response.setHeader("Authorization", authToken.toString());
         return new LoginResponse(loginRequest.getEmail(), new Date());
     }
 }

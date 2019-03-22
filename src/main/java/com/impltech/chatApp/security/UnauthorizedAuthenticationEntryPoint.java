@@ -12,7 +12,10 @@ import java.io.IOException;
 @Component
 public class UnauthorizedAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+    public void commence(
+            final HttpServletRequest request,
+            final HttpServletResponse response,
+            final AuthenticationException authException) throws IOException, ServletException {
         response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to access this resource!");
     }
 }

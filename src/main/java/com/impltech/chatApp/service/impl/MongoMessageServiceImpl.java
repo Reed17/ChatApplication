@@ -11,15 +11,15 @@ import java.util.List;
 @Service
 public class MongoMessageServiceImpl implements MessageService {
 
-    private MessageRepository messageRepository;
+    private final MessageRepository messageRepository;
 
     @Autowired
-    public MongoMessageServiceImpl(MessageRepository messageRepository) {
+    public MongoMessageServiceImpl(final MessageRepository messageRepository) {
         this.messageRepository = messageRepository;
     }
 
     @Override
-    public void sendMessageToConversation(Message message) {
+    public void sendMessageToConversation(final Message message) {
         setUsernameToMessageObject(message, message.getFromUser());
         saveMessage(message);
         setUsernameToMessageObject(message, message.getToUser());
@@ -27,15 +27,15 @@ public class MongoMessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<Message> findMessageHistoryFor(String userName, String chatRoomId) {
+    public List<Message> findMessageHistoryFor(final String userName, final String chatRoomId) {
         return messageRepository.findMessageByUsernameAndChatRoomId(userName, chatRoomId);
     }
 
-    private Message saveMessage(Message message) {
+    private Message saveMessage(final Message message) {
         return messageRepository.save(message);
     }
 
-    private void setUsernameToMessageObject(Message message, String fromUser) {
+    private void setUsernameToMessageObject(final Message message, final String fromUser) {
         message.setUsername(fromUser);
     }
 }

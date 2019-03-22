@@ -22,23 +22,19 @@ import java.util.Optional;
 @Service
 public class RedisChatRoomServiceImpl implements ChatRoomService {
 
-    private SimpMessagingTemplate webSocketMessagingTemplate;
-
-    private MessageService messageService;
-    private ChatRoomRepository chatRoomRepository;
-    private ChatRoomMapper roomMapper;
-    private UserMapper userMapper;
-
-    public RedisChatRoomServiceImpl() {
-    }
+    private final SimpMessagingTemplate webSocketMessagingTemplate;
+    private final MessageService messageService;
+    private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomMapper roomMapper;
+    private final UserMapper userMapper;
 
     @Autowired
     public RedisChatRoomServiceImpl(
-            SimpMessagingTemplate webSocketMessagingTemplate,
-            MessageService messageService,
-            ChatRoomRepository chatRoomRepository,
-            ChatRoomMapper roomMapper,
-            UserMapper userMapper) {
+            final SimpMessagingTemplate webSocketMessagingTemplate,
+            final MessageService messageService,
+            final ChatRoomRepository chatRoomRepository,
+            final ChatRoomMapper roomMapper,
+            final UserMapper userMapper) {
         this.webSocketMessagingTemplate = webSocketMessagingTemplate;
         this.messageService = messageService;
         this.chatRoomRepository = chatRoomRepository;
@@ -47,21 +43,21 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
-    public ChatRoomDto save(ChatRoomDto chatRoomDto) {
+    public ChatRoomDto save(final ChatRoomDto chatRoomDto) {
         final ChatRoom chatRoom = saveChatRoom(roomMapper.toEntity(chatRoomDto));
         return getChatRoomDto(chatRoom);
     }
 
     @Override
-    public ChatRoomDto getById(String chatRoomId) {
+    public ChatRoomDto getById(final String chatRoomId) {
         final Optional<ChatRoom> chatRoomWrapper = getByIdInternal(chatRoomId);
         return getChatRoomDto(chatRoomWrapper.get());
     }
 
     @Override
-    public ChatRoomDto join(UserDto userDto, String chatRoomId) {
-        User user = getUser(userDto);
-        Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomId);
+    public ChatRoomDto join(final UserDto userDto, final String chatRoomId) {
+        final User user = getUser(userDto);
+        final Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomId);
         final ChatRoom room = roomWrapper.get();
 
         room.getConnectedUsers().add(user);
@@ -72,9 +68,9 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
-    public ChatRoomDto leave(UserDto userDto, String chatRoomId) {
-        User user = getUser(userDto);
-        Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomId);
+    public ChatRoomDto leave(final UserDto userDto, final String chatRoomId) {
+        final User user = getUser(userDto);
+        final Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomId);
         final ChatRoom room = roomWrapper.get();
 
         room.getConnectedUsers().remove(user);
@@ -85,7 +81,7 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
-    public void sendMessage(Message message) {
+    public void sendMessage(final Message message) {
         // todo send message to user
         webSocketMessagingTemplate.convertAndSendToUser(
                 message.getToUser(),
@@ -103,33 +99,33 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
 
     @Override
     public List<ChatRoomDto> getAllChatRoomsList() {
-        List<ChatRoom> chatRooms = (List<ChatRoom>) chatRoomRepository.findAll();
+        final List<ChatRoom> chatRooms = (List<ChatRoom>) chatRoomRepository.findAll();
         return makeChatRoomList(chatRooms);
     }
 
-    private Optional<ChatRoom> getByIdInternal(String chatRoomId) {
+    private Optional<ChatRoom> getByIdInternal(final String chatRoomId) {
         return chatRoomRepository.findById(chatRoomId);
     }
 
-    private User getUser(UserDto userDto) {
+    private User getUser(final UserDto userDto) {
         return userMapper.toEntity(userDto);
     }
 
-    private ChatRoom saveChatRoom(ChatRoom room) {
+    private ChatRoom saveChatRoom(final ChatRoom room) {
         return chatRoomRepository.save(room);
     }
 
-    private ChatRoomDto getChatRoomDto(ChatRoom room) {
+    private ChatRoomDto getChatRoomDto(final ChatRoom room) {
         return roomMapper.toDto(room);
     }
 
-    private void updateConnectedUsersViaWebSocket(ChatRoom chatRoom) {
+    private void updateConnectedUsersViaWebSocket(final ChatRoom chatRoom) {
         webSocketMessagingTemplate.convertAndSend(
                 DestinationUtil.chatRoomConnectedUsers(chatRoom.getChatRoomId()),
                 chatRoom.getConnectedUsers());
     }
 
-    private List<ChatRoomDto> makeChatRoomList(List<ChatRoom> chatRooms) {
+    private List<ChatRoomDto> makeChatRoomList(final List<ChatRoom> chatRooms) {
         List<ChatRoomDto> dtoList = new ArrayList<>();
         chatRooms.forEach(room -> {
             dtoList.add(new ChatRoomDto(

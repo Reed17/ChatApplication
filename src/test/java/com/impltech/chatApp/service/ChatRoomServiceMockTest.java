@@ -30,19 +30,19 @@ import static org.mockito.Mockito.*;
 public class ChatRoomServiceMockTest {
 
     @Mock
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private SimpMessagingTemplate simpMessagingTemplateMock;
 
     @Mock
-    private MessageService messageService;
+    private MessageService messageServiceMock;
 
     @Mock
-    private ChatRoomRepository chatRoomRepository;
+    private ChatRoomRepository chatRoomRepositoryMock;
 
     @Mock
-    private ChatRoomMapper chatRoomMapper;
+    private ChatRoomMapper chatRoomMapperMock;
 
     @Mock
-    private UserMapper userMapper;
+    private UserMapper userMapperMock;
 
     @Captor
     private ArgumentCaptor<ChatRoom> chatRoomCaptor;
@@ -60,25 +60,22 @@ public class ChatRoomServiceMockTest {
     private ArgumentCaptor<Object> messageObjectCaptor;
 
     @InjectMocks
-    private ChatRoomService chatRoomService = new RedisChatRoomServiceImpl();
+    private RedisChatRoomServiceImpl chatRoomService;
 
     @Test
     void whenCreateChatRoomThenOperationSuccessful() {
         ChatRoom newChatRoom = new ChatRoom("user problem solving chat", Collections.emptyList());
         ChatRoomDto dto = new ChatRoomDto("user problem solving chat", Collections.emptyList());
 
-        when(chatRoomMapper.toEntity(dto)).thenReturn(newChatRoom);
-        when(chatRoomRepository.save(newChatRoom)).thenAnswer(new Answer<ChatRoom>() {
-            @Override
-            public ChatRoom answer(InvocationOnMock invocation) throws Throwable {
-                ChatRoom room = invocation.getArgument(0);
-                room.setChatRoomId("1ewsdsc123");
-                return room;
-            }
+        when(chatRoomMapperMock.toEntity(dto)).thenReturn(newChatRoom);
+        when(chatRoomRepositoryMock.save(newChatRoom)).thenAnswer((Answer<ChatRoom>) invocation -> {
+            ChatRoom room = invocation.getArgument(0);
+            room.setChatRoomId("1ewsdsc123");
+            return room;
         });
 
         chatRoomService.save(dto);
-        Mockito.verify(chatRoomRepository, Mockito.times(1)).save(newChatRoom);
+        Mockito.verify(chatRoomRepositoryMock, Mockito.times(1)).save(newChatRoom);
     }
 
     @Test
@@ -86,16 +83,16 @@ public class ChatRoomServiceMockTest {
         ChatRoom room = new ChatRoom("test room", Collections.emptyList());
         room.setChatRoomId("1qaz");
 
-        when(chatRoomRepository.findById(anyString())).thenReturn(Optional.of(room));
+        when(chatRoomRepositoryMock.findById(anyString())).thenReturn(Optional.of(room));
 
         chatRoomService.getById(room.getChatRoomId());
-        Mockito.verify(chatRoomRepository, times(1)).findById(room.getChatRoomId());
+        Mockito.verify(chatRoomRepositoryMock, times(1)).findById(room.getChatRoomId());
     }
 
     @Test
     void whenGetAllExistedRoomsThenOperationIsSuccessful() {
         chatRoomService.getAllChatRoomsList();
-        Mockito.verify(chatRoomRepository, times(1)).findAll();
+        Mockito.verify(chatRoomRepositoryMock, times(1)).findAll();
     }
 
     @Test
@@ -112,8 +109,8 @@ public class ChatRoomServiceMockTest {
         roomWithOneUser.setName("joining room");
         User joiningUser = new User("test", "test@gmail.com", "1qazxsw2");
 
-        when(chatRoomRepository.findById(eq(roomWithOneUser.getChatRoomId()))).thenReturn(Optional.of(roomWithOneUser));
-        when(chatRoomRepository.save(roomWithOneUser))
+        when(chatRoomRepositoryMock.findById(eq(roomWithOneUser.getChatRoomId()))).thenReturn(Optional.of(roomWithOneUser));
+        when(chatRoomRepositoryMock.save(roomWithOneUser))
                 .thenAnswer((Answer<ChatRoom>) invocation -> {
                     ChatRoom room = invocation.getArgument(0);
                     room.getConnectedUsers().add(0, joiningUser);
@@ -124,8 +121,8 @@ public class ChatRoomServiceMockTest {
         chatRoomService.join(dto, chatRoomDto.getChatRoomId());
 
         assertThat(roomWithOneUser.getConnectedUsers().size(), is(1));
-        verify(chatRoomRepository, times(1)).save(roomWithOneUser);
-        verify(simpMessagingTemplate, times(1)).convertAndSend(
+        verify(chatRoomRepositoryMock, times(1)).save(roomWithOneUser);
+        verify(simpMessagingTemplateMock, times(1)).convertAndSend(
                 destinationCaptor.capture(),
                 messageObjectCaptor.capture());
         assertThat(roomWithOneUser.getConnectedUsers().contains(joiningUser), is(true));
@@ -158,14 +155,14 @@ public class ChatRoomServiceMockTest {
         forReturn.setChatRoomId(dto.getChatRoomId());
         forReturn.setName(dto.getName());
 
-        when(chatRoomRepository.findById(eq(dto.getChatRoomId()))).thenReturn(Optional.of(forReturn));
-        when(chatRoomRepository.save(any(ChatRoom.class))).thenReturn(forReturn);
+        when(chatRoomRepositoryMock.findById(eq(dto.getChatRoomId()))).thenReturn(Optional.of(forReturn));
+        when(chatRoomRepositoryMock.save(any(ChatRoom.class))).thenReturn(forReturn);
 
         chatRoomService.leave(leavingUser, dto.getChatRoomId());
 
         assertThat(forReturn.getConnectedUsers().size(), is(0));
-        verify(chatRoomRepository, times(1)).save(forReturn);
-        verify(simpMessagingTemplate, times(1)).convertAndSend(
+        verify(chatRoomRepositoryMock, times(1)).save(forReturn);
+        verify(simpMessagingTemplateMock, times(1)).convertAndSend(
                 destinationCaptor.capture(),
                 messageCaptor.capture()
         );
@@ -192,11 +189,11 @@ public class ChatRoomServiceMockTest {
 
         chatRoomService.sendMessage(message);
 
-        verify(simpMessagingTemplate, times(2)).convertAndSendToUser(
+        verify(simpMessagingTemplateMock, times(2)).convertAndSendToUser(
                 toUserCaptor.capture(),
                 destinationCaptor.capture(),
                 messageObjectCaptor.capture());
-        verify(messageService, times(1)).sendMessageToConversation(message);
+        verify(messageServiceMock, times(1)).sendMessageToConversation(message);
 
         List<String> toUsers = toUserCaptor.getAllValues();
         List<String> destinations = destinationCaptor.getAllValues();

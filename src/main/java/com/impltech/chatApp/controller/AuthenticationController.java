@@ -18,20 +18,22 @@ import javax.validation.Valid;
 @RequestMapping("/api/auth")
 public class AuthenticationController {
 
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
     @Autowired
-    public AuthenticationController(AuthenticationService authenticationService) {
+    public AuthenticationController(final AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody @Valid SignUpRequest signUpRequest, HttpServletResponse response) {
+    public ResponseEntity<?> signUp(@RequestBody @Valid final SignUpRequest signUpRequest,
+                                    final HttpServletResponse response) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.signUp(signUpRequest, response));
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signIn(@RequestBody @Valid LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> signIn(@RequestBody @Valid final LoginRequest loginRequest,
+                                    final HttpServletResponse response) {
         return ResponseEntity.ok().body(authenticationService.signIn(loginRequest, response));
     }
 }

@@ -17,8 +17,8 @@ public interface UserService {
 
     Boolean existsByEmail(final String email);
 
-    UserDto addNewUser(UserDto userDto);
+    UserDto addNewUser(final UserDto userDto);
 
-    void delete(Long userId);
+    void delete(final Long userId);
 
 }

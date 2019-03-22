@@ -12,29 +12,29 @@ import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 @Component
 public class WebSocketEventHandler {
 
-    private ChatRoomService chatRoomService;
+    private final ChatRoomService chatRoomService;
 
     @Autowired
-    public WebSocketEventHandler(ChatRoomService chatRoomService) {
+    public WebSocketEventHandler(final ChatRoomService chatRoomService) {
         this.chatRoomService = chatRoomService;
     }
 
     @EventListener
-    public void handleSessionConnectEvent(SessionConnectEvent event) {
-        SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.wrap(event.getMessage());
-        String chatRoomId = headers.getNativeHeader("chatRoomId").get(0);
+    public void handleSessionConnectEvent(final SessionConnectEvent event) {
+        final SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.wrap(event.getMessage());
+        final String chatRoomId = headers.getNativeHeader("chatRoomId").get(0);
         headers.getSessionAttributes().put("chatRoomId", chatRoomId);
-        UserDto user = new UserDto();
+        final UserDto user = new UserDto();
         user.setUsername(event.getUser().getName());
 
         chatRoomService.join(user, chatRoomId);
     }
 
     @EventListener
-    public void handleSessionDisconnectEvent(SessionDisconnectEvent event) {
-        SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.wrap(event.getMessage());
-        String chatRoomId = headers.getSessionAttributes().get("chatRoomId").toString();
-        UserDto leavingUser = new UserDto();
+    public void handleSessionDisconnectEvent(final SessionDisconnectEvent event) {
+        final SimpMessageHeaderAccessor headers = SimpMessageHeaderAccessor.wrap(event.getMessage());
+        final String chatRoomId = headers.getSessionAttributes().get("chatRoomId").toString();
+        final UserDto leavingUser = new UserDto();
         leavingUser.setUsername(event.getUser().getName());
 
         chatRoomService.leave(leavingUser, chatRoomId);

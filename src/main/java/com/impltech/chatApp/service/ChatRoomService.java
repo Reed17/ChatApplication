@@ -8,10 +8,10 @@ import com.impltech.chatApp.entity.Message;
 import java.util.List;
 
 public interface ChatRoomService {
-    ChatRoomDto save(ChatRoomDto chatRoomDto);
-    ChatRoomDto getById(String chatRoomId);
-    ChatRoomDto join(UserDto userDto, String chatRoomId);
-    ChatRoomDto leave(UserDto userDto, String chatRoomId);
-    void sendMessage(Message message);
+    ChatRoomDto save(final ChatRoomDto chatRoomDto);
+    ChatRoomDto getById(final String chatRoomId);
+    ChatRoomDto join(final UserDto userDto, final String chatRoomId);
+    ChatRoomDto leave(final UserDto userDto, final String chatRoomId);
+    void sendMessage(final Message message);
     List<ChatRoomDto> getAllChatRoomsList();
 }

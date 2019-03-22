@@ -23,17 +23,17 @@ import java.util.List;
 @PreAuthorize("hasAnyAuthority('USER')")
 public class ChatRoomController {
 
-    private ChatRoomService chatRoomService;
-    private MessageService messageService;
+    private final ChatRoomService chatRoomService;
+    private final MessageService messageService;
 
     @Autowired
-    public ChatRoomController(ChatRoomService chatRoomService, MessageService messageService) {
+    public ChatRoomController(final ChatRoomService chatRoomService, final MessageService messageService) {
         this.chatRoomService = chatRoomService;
         this.messageService = messageService;
     }
 
     @PostMapping("/chatroom/new")
-    public ResponseEntity<?> createChatRoom(@RequestBody ChatRoomDto chatRoomDto) {
+    public ResponseEntity<?> createChatRoom(@RequestBody final ChatRoomDto chatRoomDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(chatRoomService.save(chatRoomDto));
     }
 
@@ -55,20 +55,20 @@ public class ChatRoomController {
     }
 
     @SubscribeMapping("/connected.users")
-    public List<User> listChatRoomConnectedUsersOnSubscribe(SimpMessageHeaderAccessor headerAccessor) {
-        String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
+    public List<User> listChatRoomConnectedUsersOnSubscribe(final SimpMessageHeaderAccessor headerAccessor) {
+        final String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
         return chatRoomService.getById(chatRoomId).getConnectedUsers();
     }
 
     @SubscribeMapping("/old.messages")
-    public List<Message> listOldMessagesFromUserOnSubscribe(UserDto userDto, SimpMessageHeaderAccessor headerAccessor) {
-        String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
+    public List<Message> listOldMessagesFromUserOnSubscribe(final UserDto userDto, final SimpMessageHeaderAccessor headerAccessor) {
+        final String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
         return messageService.findMessageHistoryFor(userDto.getUsername(), chatRoomId);
     }
 
     @MessageMapping("/send.message")
-    public void sendMessage(@Payload Message message, UserDto userDto, SimpMessageHeaderAccessor headerAccessor) {
-        String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
+    public void sendMessage(@Payload final Message message, final UserDto userDto, final SimpMessageHeaderAccessor headerAccessor) {
+        final String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
         message.setFromUser(userDto.getUsername());
         message.setChatRoomId(chatRoomId);
         // todo send message to destination
