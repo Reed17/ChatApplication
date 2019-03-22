@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.impltech.chatApp.utils.ValidationUtil.isChatRoomExists;
+import static com.impltech.chatApp.utils.ValidationUtil.isMessageEmpty;
+
 @Service
 public class RedisChatRoomServiceImpl implements ChatRoomService {
 
@@ -51,14 +54,14 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
     @Override
     public ChatRoomDto getById(final String chatRoomId) {
         final Optional<ChatRoom> chatRoomWrapper = getByIdInternal(chatRoomId);
-        return getChatRoomDto(chatRoomWrapper.get());
+        return getChatRoomDto(getRoomFromWrapper(chatRoomWrapper));
     }
 
     @Override
     public ChatRoomDto join(final UserDto userDto, final String chatRoomId) {
         final User user = getUser(userDto);
         final Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomId);
-        final ChatRoom room = roomWrapper.get();
+        final ChatRoom room = getRoomFromWrapper(roomWrapper);
 
         room.getConnectedUsers().add(user);
 
@@ -67,11 +70,15 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
         return getChatRoomDto(room);
     }
 
+    private ChatRoom getRoomFromWrapper(Optional<ChatRoom> roomWrapper) {
+        return roomWrapper.get();
+    }
+
     @Override
     public ChatRoomDto leave(final UserDto userDto, final String chatRoomId) {
         final User user = getUser(userDto);
         final Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomId);
-        final ChatRoom room = roomWrapper.get();
+        final ChatRoom room = getRoomFromWrapper(roomWrapper);
 
         room.getConnectedUsers().remove(user);
 
@@ -81,7 +88,8 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
-    public void sendMessage(final Message message) {
+    public void sendMessage(final Message message) throws Throwable {
+        isMessageEmpty(message.getContent());
         // todo send message to user
         webSocketMessagingTemplate.convertAndSendToUser(
                 message.getToUser(),

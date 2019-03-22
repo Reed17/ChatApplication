@@ -43,6 +43,18 @@ public class GlobalExceptionHandler {
         return getApiErrorResponse(ex.getClass().getSimpleName(), ex.getCause(), ex.getMessage());
     }
 
+    @ExceptionHandler(value = EmptyMessageException.class)
+    @ResponseBody
+    public ApiErrorResponse handleEmptyMessageException(final EmptyMessageException ex) {
+        return getApiErrorResponse(ex.getClass().getSimpleName(), ex.getCause(), ex.getMessage());
+    }
+
+    @ExceptionHandler(value = UserNotExistsException.class)
+    @ResponseBody
+    public ApiErrorResponse handleUserNotExistsException(final UserNotExistsException ex) {
+        return getApiErrorResponse(ex.getClass().getSimpleName(), ex.getCause(), ex.getMessage());
+    }
+
     private ApiErrorResponse getApiErrorResponse(final String errorName, final Throwable cause, final String errMsg) {
         final String errCause = String.valueOf(cause);
         LOG.error(errCause);

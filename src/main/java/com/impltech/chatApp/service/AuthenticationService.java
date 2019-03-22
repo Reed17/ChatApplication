@@ -8,6 +8,6 @@ import com.impltech.chatApp.dto.SignUpResponse;
 import javax.servlet.http.HttpServletResponse;
 
 public interface AuthenticationService {
-    SignUpResponse signUp(final SignUpRequest signUpRequest, final HttpServletResponse response);
-    LoginResponse signIn(final LoginRequest loginRequest, final HttpServletResponse response);
+    SignUpResponse signUp(final SignUpRequest signUpRequest, final HttpServletResponse response) throws Throwable;
+    LoginResponse signIn(final LoginRequest loginRequest, final HttpServletResponse response) throws Throwable;
 }

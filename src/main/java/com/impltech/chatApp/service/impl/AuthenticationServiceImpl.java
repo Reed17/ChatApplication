@@ -2,7 +2,9 @@ package com.impltech.chatApp.service.impl;
 
 import com.impltech.chatApp.dto.*;
 import com.impltech.chatApp.entity.User;
+import com.impltech.chatApp.enums.Message;
 import com.impltech.chatApp.exceptions.UserAlreadyExistsException;
+import com.impltech.chatApp.exceptions.UserNotExistsException;
 import com.impltech.chatApp.security.UserPrincipal;
 import com.impltech.chatApp.service.AuthenticationService;
 import com.impltech.chatApp.service.UserService;
@@ -33,23 +35,28 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public SignUpResponse signUp(final SignUpRequest signUpRequest, final HttpServletResponse response) {
-        // todo exception handling
+    public SignUpResponse signUp(final SignUpRequest signUpRequest, final HttpServletResponse response) throws Throwable {
         if (userService.existsByEmail(signUpRequest.getEmail())) {
-            final String message = "User with this email already exists!";
-            LOG.error(message);
-            throw new UserAlreadyExistsException(message);
+            final String errMsg = Message.USER_ALREADY_EXISTS.getMessage();
+            LOG.error(errMsg);
+            throw new UserAlreadyExistsException(errMsg);
         }
+
         userService.addNewUser(
                 new UserDto(
                         signUpRequest.getUsername(),
                         signUpRequest.getEmail(),
                         signUpRequest.getPassword()));
+
         final User newUser = userService.findByEmail(signUpRequest.getEmail());
+
         final UserPrincipal userPrincipal = UserPrincipal.create(newUser);
+
         final UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
+
         SecurityContextHolder.getContext().setAuthentication(authToken);
+
         return new SignUpResponse(
                 signUpRequest.getEmail(),
                 signUpRequest.getUsername(),
@@ -58,12 +65,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public LoginResponse signIn(final LoginRequest loginRequest, final HttpServletResponse response) {
-        // todo exception handling
+    public LoginResponse signIn(final LoginRequest loginRequest, final HttpServletResponse response) throws Throwable {
+        if (!userService.existsByEmail(loginRequest.getEmail())) {
+            final String errMsg = Message.USER_WITH_SUCH_EMAIL_NOT_EXISTS.getMessage();
+            LOG.error(errMsg);
+            throw new UserNotExistsException(errMsg);
+        }
+
         final UsernamePasswordAuthenticationToken authToken =
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword());
+
         final Authentication authentication =
                 authenticationManager.authenticate(authToken);
+
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return new LoginResponse(loginRequest.getEmail(), new Date());
     }

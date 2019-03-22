@@ -13,7 +13,6 @@ import com.impltech.chatApp.utils.DestinationUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -82,7 +81,6 @@ public class ChatRoomServiceMockTest {
     void whenGetChatRoomByIdThenOperationSuccessful() {
         ChatRoom room = new ChatRoom("test room", Collections.emptyList());
         room.setChatRoomId("1qaz");
-
         when(chatRoomRepositoryMock.findById(anyString())).thenReturn(Optional.of(room));
 
         chatRoomService.getById(room.getChatRoomId());
@@ -170,7 +168,7 @@ public class ChatRoomServiceMockTest {
     }
 
     @Test
-    void whenUsersSendMessagesWithinChatRoomThanOperationIsSuccessful() {
+    void whenUsersSendMessagesWithinChatRoomThanOperationIsSuccessful() throws Throwable {
         User client = new User("client", "client@gmail.com", "1qazxsw2");
         client.setUserId(1L);
         User manager = new User("manager", "manager@gmail.com", "0oplkmn");

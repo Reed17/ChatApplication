@@ -19,11 +19,12 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class HttpSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private UserDetailsServiceImpl userDetailsService;
-    private UnauthorizedAuthenticationEntryPoint authenticationEntryPoint;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final UnauthorizedAuthenticationEntryPoint authenticationEntryPoint;
 
     @Autowired
-    public HttpSecurityConfig(UserDetailsServiceImpl userDetailsService, UnauthorizedAuthenticationEntryPoint authenticationEntryPoint) {
+    public HttpSecurityConfig(final UserDetailsServiceImpl userDetailsService,
+                              final UnauthorizedAuthenticationEntryPoint authenticationEntryPoint) {
         this.userDetailsService = userDetailsService;
         this.authenticationEntryPoint = authenticationEntryPoint;
     }

@@ -37,7 +37,7 @@ public class AuthenticationControllerIntegrationTest {
     private static final String API_AUTH_SIGNIN = "/api/auth/signin";
 
     private static final String USER_ALREADY_EXISTS_EXCEPTION_RESPONSE_JSON = "json/user-already-exists-exception-response.json";
-    private static final String USER_NOT_FOUND_EXCEPTION_RESPONSE_JSON = "json/user-not-found-exception-response.json";
+    private static final String USER_NOT_FOUND_EXCEPTION_RESPONSE_JSON = "json/user-not-exists-exception-response.json";
 
     @Autowired
     private WebApplicationContext wac;
@@ -113,6 +113,7 @@ public class AuthenticationControllerIntegrationTest {
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
+
         String expected = JsonReadingUtil.readFile(USER_NOT_FOUND_EXCEPTION_RESPONSE_JSON).toString();
         JSONAssert.assertEquals(expected, response, JSONCompareMode.LENIENT);
     }

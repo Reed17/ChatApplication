@@ -68,7 +68,7 @@ public class MongoMessageServiceUnitTest {
     }
 
     @Test
-    void whenUsersMessagingThenOperationSuccessful() {
+    void whenUsersMessagingThenOperationSuccessful() throws Throwable {
         UserDto client = new UserDto("super client", "cl1ent@mail.ru", "0192irfh");
         UserDto manager = new UserDto("supreme manager", "pm@bigmir.net", "ppoe90io");
 
@@ -104,7 +104,7 @@ public class MongoMessageServiceUnitTest {
         return chatRoomService.join(client, chatRoomId);
     }
 
-    private List<Message> getMessageHistoryFor(UserDto manager, ChatRoomDto managerJoined) {
+    private List<Message> getMessageHistoryFor(UserDto manager, ChatRoomDto managerJoined) throws Throwable {
         return messageService.findMessageHistoryFor(manager.getUsername(), managerJoined.getChatRoomId());
     }
 

@@ -61,13 +61,13 @@ public class ChatRoomController {
     }
 
     @SubscribeMapping("/old.messages")
-    public List<Message> listOldMessagesFromUserOnSubscribe(final UserDto userDto, final SimpMessageHeaderAccessor headerAccessor) {
+    public List<Message> listOldMessagesFromUserOnSubscribe(final UserDto userDto, final SimpMessageHeaderAccessor headerAccessor) throws Throwable {
         final String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
         return messageService.findMessageHistoryFor(userDto.getUsername(), chatRoomId);
     }
 
     @MessageMapping("/send.message")
-    public void sendMessage(@Payload final Message message, final UserDto userDto, final SimpMessageHeaderAccessor headerAccessor) {
+    public void sendMessage(@Payload final Message message, final UserDto userDto, final SimpMessageHeaderAccessor headerAccessor) throws Throwable {
         final String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
         message.setFromUser(userDto.getUsername());
         message.setChatRoomId(chatRoomId);

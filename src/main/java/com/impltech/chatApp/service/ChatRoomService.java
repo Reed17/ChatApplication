@@ -12,6 +12,6 @@ public interface ChatRoomService {
     ChatRoomDto getById(final String chatRoomId);
     ChatRoomDto join(final UserDto userDto, final String chatRoomId);
     ChatRoomDto leave(final UserDto userDto, final String chatRoomId);
-    void sendMessage(final Message message);
+    void sendMessage(final Message message) throws Throwable;
     List<ChatRoomDto> getAllChatRoomsList();
 }

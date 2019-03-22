@@ -30,32 +30,32 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByEmail(final String email) {
+    public User findByEmail(final String email) throws Throwable {
         checkEmailValidity(email);
         return userRepository.findByEmail(email);
     }
 
     @Override
-    public Optional<User> findById(final Long userId) {
+    public Optional<User> findById(final Long userId) throws Throwable {
         checkUserExistenceById(userRepository.existsById(userId));
         return userRepository.findById(userId);
     }
 
     @Override
-    public Optional<User> findByUsername(final String username) {
+    public Optional<User> findByUsername(final String username) throws Throwable {
         checkUsernameValidity(username);
         isUserExistsByUsername(userRepository.existsByUsername(username));
         return userRepository.findByUsername(username);
     }
 
     @Override
-    public Boolean existsByUsername(final String username) {
+    public Boolean existsByUsername(final String username) throws Throwable {
         checkUsernameValidity(username);
         return userRepository.existsByUsername(username);
     }
 
     @Override
-    public Boolean existsByEmail(final String email) {
+    public Boolean existsByEmail(final String email) throws Throwable {
         checkEmailValidity(email);
         return userRepository.existsByEmail(email);
     }
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(final Long userId) {
+    public void delete(final Long userId) throws Throwable {
         checkUserExistenceById(userRepository.existsById(userId));
         userRepository.deleteById(userId);
     }

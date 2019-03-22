@@ -27,13 +27,13 @@ public class AuthenticationController {
 
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody @Valid final SignUpRequest signUpRequest,
-                                    final HttpServletResponse response) {
+                                    final HttpServletResponse response) throws Throwable {
         return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.signUp(signUpRequest, response));
     }
 
     @PostMapping("/signin")
     public ResponseEntity<?> signIn(@RequestBody @Valid final LoginRequest loginRequest,
-                                    final HttpServletResponse response) {
+                                    final HttpServletResponse response) throws Throwable {
         return ResponseEntity.ok().body(authenticationService.signIn(loginRequest, response));
     }
 }
