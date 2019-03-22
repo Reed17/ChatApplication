@@ -47,4 +47,13 @@ public class ChatRoomDto {
     public void setName(String name) {
         this.name = name;
     }
+
+    @Override
+    public String toString() {
+        return "ChatRoomDto{" +
+                "chatRoomId='" + chatRoomId + '\'' +
+                ", name='" + name + '\'' +
+                ", connectedUsers=" + connectedUsers +
+                '}';
+    }
 }

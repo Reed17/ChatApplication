@@ -59,9 +59,9 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
-    public ChatRoomDto join(UserDto userDto, ChatRoomDto chatRoomDto) {
+    public ChatRoomDto join(UserDto userDto, String chatRoomId) {
         User user = getUser(userDto);
-        Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomDto.getChatRoomId());
+        Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomId);
         final ChatRoom room = roomWrapper.get();
 
         room.getConnectedUsers().add(user);
@@ -72,9 +72,9 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
-    public ChatRoomDto leave(UserDto userDto, ChatRoomDto chatRoomDto) {
+    public ChatRoomDto leave(UserDto userDto, String chatRoomId) {
         User user = getUser(userDto);
-        Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomDto.getChatRoomId());
+        Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomId);
         final ChatRoom room = roomWrapper.get();
 
         room.getConnectedUsers().remove(user);

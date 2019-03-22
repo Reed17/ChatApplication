@@ -121,7 +121,7 @@ public class ChatRoomServiceMockTest {
                     return room;
                 });
 
-        chatRoomService.join(dto, chatRoomDto);
+        chatRoomService.join(dto, chatRoomDto.getChatRoomId());
 
         assertThat(roomWithOneUser.getConnectedUsers().size(), is(1));
         verify(chatRoomRepository, times(1)).save(roomWithOneUser);
@@ -161,7 +161,7 @@ public class ChatRoomServiceMockTest {
         when(chatRoomRepository.findById(eq(dto.getChatRoomId()))).thenReturn(Optional.of(forReturn));
         when(chatRoomRepository.save(any(ChatRoom.class))).thenReturn(forReturn);
 
-        chatRoomService.leave(leavingUser, dto);
+        chatRoomService.leave(leavingUser, dto.getChatRoomId());
 
         assertThat(forReturn.getConnectedUsers().size(), is(0));
         verify(chatRoomRepository, times(1)).save(forReturn);

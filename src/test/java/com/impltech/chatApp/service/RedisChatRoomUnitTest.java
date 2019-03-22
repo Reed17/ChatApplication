@@ -62,12 +62,12 @@ public class RedisChatRoomUnitTest {
         UserDto manager = new UserDto("manager_1", "mngr@gmail.com", "56tyghvn");
 
         // todo emulate the client connection
-        ChatRoomDto roomDtoWithConnectedClient = chatRoomService.join(client, chatRoomDto);
+        ChatRoomDto roomDtoWithConnectedClient = chatRoomService.join(client, chatRoomDto.getChatRoomId());
 
         assertThat(roomDtoWithConnectedClient.getConnectedUsers().size(), is(1));
 
         // todo emulate manager connection
-        ChatRoomDto roomWithClientAndManager = chatRoomService.join(manager, roomDtoWithConnectedClient);
+        ChatRoomDto roomWithClientAndManager = chatRoomService.join(manager, roomDtoWithConnectedClient.getChatRoomId());
 
         assertThat(roomWithClientAndManager.getConnectedUsers().size(), is(2));
 
@@ -90,13 +90,13 @@ public class RedisChatRoomUnitTest {
         ChatRoomDto emptyChatRoomDto = chatRoomMapper.toDto(emptyChatRoom);
 
         // todo emulate client and manager connections
-        chatRoomService.join(client, emptyChatRoomDto);
-        ChatRoomDto roomWithClientAndManager = chatRoomService.join(manager, emptyChatRoomDto);
+        chatRoomService.join(client, emptyChatRoomDto.getChatRoomId());
+        ChatRoomDto roomWithClientAndManager = chatRoomService.join(manager, emptyChatRoomDto.getChatRoomId());
 
         assertThat(roomWithClientAndManager.getConnectedUsers().size(), is(2));
 
         // todo emulate client left the room
-        ChatRoomDto roomWithManager = chatRoomService.leave(client, roomWithClientAndManager);
+        ChatRoomDto roomWithManager = chatRoomService.leave(client, roomWithClientAndManager.getChatRoomId());
 
         // todo ensure client left
         List<User> userList = roomWithManager.getConnectedUsers();
@@ -105,7 +105,7 @@ public class RedisChatRoomUnitTest {
         assertEquals(manager.getUsername(), userList.get(0).getUsername());
 
         // todo emulate manager left the room
-        ChatRoomDto emptyRoom = chatRoomService.leave(manager, roomWithManager);
+        ChatRoomDto emptyRoom = chatRoomService.leave(manager, roomWithManager.getChatRoomId());
 
         // todo ensure manager left the room
         assertThat(emptyRoom.getConnectedUsers().size(), is(0));

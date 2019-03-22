@@ -76,8 +76,8 @@ public class MongoMessageServiceUnitTest {
         ChatRoom actualRoom = chatRoomWrapper.get();
         ChatRoomDto emptyRoom = chatRoomMapper.toDto(actualRoom);
 
-        ChatRoomDto clientJoined = joinToRoom(client, emptyRoom);
-        ChatRoomDto managerJoined = joinToRoom(manager, clientJoined);
+        ChatRoomDto clientJoined = joinToRoom(client, emptyRoom.getChatRoomId());
+        ChatRoomDto managerJoined = joinToRoom(manager, clientJoined.getChatRoomId());
 
         assertThat(managerJoined.getConnectedUsers().size(), is(2));
 
@@ -100,8 +100,8 @@ public class MongoMessageServiceUnitTest {
         assertEquals(client.getUsername(), clientMessages.get(0).getUsername());
     }
 
-    private ChatRoomDto joinToRoom(UserDto client, ChatRoomDto emptyRoom) {
-        return chatRoomService.join(client, emptyRoom);
+    private ChatRoomDto joinToRoom(UserDto client, String chatRoomId) {
+        return chatRoomService.join(client, chatRoomId);
     }
 
     private List<Message> getMessageHistoryFor(UserDto manager, ChatRoomDto managerJoined) {

@@ -32,7 +32,7 @@ public class ChatRoomController {
         this.messageService = messageService;
     }
 
-    @PostMapping("/chatroom")
+    @PostMapping("/chatroom/new")
     public ResponseEntity<?> createChatRoom(@RequestBody ChatRoomDto chatRoomDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(chatRoomService.save(chatRoomDto));
     }
@@ -42,10 +42,16 @@ public class ChatRoomController {
         return ResponseEntity.ok().body(chatRoomService.getAllChatRoomsList());
     }
 
-    @RequestMapping("/chatroom/{chatRoomId}")
-    public ResponseEntity<?> joinTheRoom(@PathVariable("chatRoomId") final String chatRoomId) {
-        ChatRoomDto chatRoomDto = chatRoomService.getById(chatRoomId);
-        return ResponseEntity.ok().body(chatRoomDto);
+    @PutMapping("/chatroom/{chatRoomId}/join")
+    public ResponseEntity<?> joinTheRoom(@PathVariable("chatRoomId") final String chatRoomId,
+                                         @RequestBody final UserDto userDto) {
+        return ResponseEntity.ok().body(chatRoomService.join(userDto, chatRoomId));
+    }
+
+    @PutMapping("/chatroom/{chatRoomId}/leave")
+    public ResponseEntity<?> leaveTheRoom(@PathVariable("chatRoomId") final String chatRoomId,
+                                         @RequestBody final UserDto userDto) {
+        return ResponseEntity.ok().body(chatRoomService.leave(userDto, chatRoomId));
     }
 
     @SubscribeMapping("/connected.users")

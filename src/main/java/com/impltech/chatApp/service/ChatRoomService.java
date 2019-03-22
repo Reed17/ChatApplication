@@ -10,8 +10,8 @@ import java.util.List;
 public interface ChatRoomService {
     ChatRoomDto save(ChatRoomDto chatRoomDto);
     ChatRoomDto getById(String chatRoomId);
-    ChatRoomDto join(UserDto userDto, ChatRoomDto chatRoomDto);
-    ChatRoomDto leave(UserDto userDto, ChatRoomDto chatRoomDto);
+    ChatRoomDto join(UserDto userDto, String chatRoomId);
+    ChatRoomDto leave(UserDto userDto, String chatRoomId);
     void sendMessage(Message message);
     List<ChatRoomDto> getAllChatRoomsList();
 }

@@ -27,7 +27,7 @@ public class WebSocketEventHandler {
         UserDto user = new UserDto();
         user.setUsername(event.getUser().getName());
 
-        chatRoomService.join(user, chatRoomService.getById(chatRoomId));
+        chatRoomService.join(user, chatRoomId);
     }
 
     @EventListener
@@ -37,6 +37,6 @@ public class WebSocketEventHandler {
         UserDto leavingUser = new UserDto();
         leavingUser.setUsername(event.getUser().getName());
 
-        chatRoomService.leave(leavingUser, chatRoomService.getById(chatRoomId));
+        chatRoomService.leave(leavingUser, chatRoomId);
     }
 }
