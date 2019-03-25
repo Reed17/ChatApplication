@@ -1,5 +1,6 @@
 package com.impltech.chatApp.security;
 
+import com.impltech.chatApp.enums.Message;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,6 @@ public class UnauthorizedAuthenticationEntryPoint implements AuthenticationEntry
             final HttpServletRequest request,
             final HttpServletResponse response,
             final AuthenticationException authException) throws IOException, ServletException {
-        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "You are not authorized to access this resource!");
+        response.sendError(HttpServletResponse.SC_UNAUTHORIZED, Message.UNAUTHORIZED_ACCESS.getMessage());
     }
 }

@@ -26,14 +26,19 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody @Valid final SignUpRequest signUpRequest,
+    public ResponseEntity<?> signUp(@RequestBody final SignUpRequest signUpRequest,
                                     final HttpServletResponse response) throws Throwable {
-        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.signUp(signUpRequest, response));
+        System.out.println(signUpRequest.toString());
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(authenticationService.signUp(signUpRequest, response));
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> signIn(@RequestBody @Valid final LoginRequest loginRequest,
+    public ResponseEntity<?> signIn(@RequestBody final LoginRequest loginRequest,
                                     final HttpServletResponse response) throws Throwable {
-        return ResponseEntity.ok().body(authenticationService.signIn(loginRequest, response));
+        return ResponseEntity
+                .ok()
+                .body(authenticationService.signIn(loginRequest, response));
     }
 }

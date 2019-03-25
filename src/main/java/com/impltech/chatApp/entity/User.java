@@ -3,7 +3,6 @@ package com.impltech.chatApp.entity;
 import com.impltech.chatApp.enums.Role;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.HashSet;
@@ -28,7 +27,6 @@ public class User {
     private String username;
 
     @NotBlank
-    @Email
     private String email;
 
     @NotBlank

@@ -34,10 +34,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestPropertySource(locations = "classpath:application-test.yml")
 public class ChatRoomControllerIntegrationTest {
 
-    public static final String API_CHATROOM_LEAVE = "/chatroom/{id}/leave";
-    private static final String API_CHATROOM = "/chatroom/new";
     private static final String API_CHATS = "/chats";
-    public static final String API_CHATROOM_JOIN = "/chatroom/{id}/join";
+    private static final String API_CHATROOM = "/chatroom/new";
+    private static final String API_CHATROOM_JOIN = "/chatroom/{id}/join";
+    private static final String API_CHATROOM_LEAVE = "/chatroom/{id}/leave";
 
     @Autowired
     private WebApplicationContext wac;

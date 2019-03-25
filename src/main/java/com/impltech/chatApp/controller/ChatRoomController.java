@@ -39,20 +39,28 @@ public class ChatRoomController {
 
     @GetMapping("/chats")
     public ResponseEntity<?> getChatRooms() {
-        return ResponseEntity.ok().body(chatRoomService.getAllChatRoomsList());
+        return ResponseEntity
+                .ok()
+                .body(chatRoomService.getAllChatRoomsList());
     }
 
     @PutMapping("/chatroom/{chatRoomId}/join")
     public ResponseEntity<?> joinTheRoom(@PathVariable("chatRoomId") final String chatRoomId,
                                          @RequestBody final UserDto userDto) {
-        return ResponseEntity.ok().body(chatRoomService.join(userDto, chatRoomId));
+        return ResponseEntity
+                .ok()
+                .body(chatRoomService.join(userDto, chatRoomId));
     }
 
     @PutMapping("/chatroom/{chatRoomId}/leave")
     public ResponseEntity<?> leaveTheRoom(@PathVariable("chatRoomId") final String chatRoomId,
                                          @RequestBody final UserDto userDto) {
-        return ResponseEntity.ok().body(chatRoomService.leave(userDto, chatRoomId));
+        return ResponseEntity
+                .ok()
+                .body(chatRoomService.leave(userDto, chatRoomId));
     }
+
+    // TODO add response wrappers
 
     @SubscribeMapping("/connected.users")
     public List<User> listChatRoomConnectedUsersOnSubscribe(final SimpMessageHeaderAccessor headerAccessor) {
@@ -61,7 +69,9 @@ public class ChatRoomController {
     }
 
     @SubscribeMapping("/old.messages")
-    public List<Message> listOldMessagesFromUserOnSubscribe(final UserDto userDto, final SimpMessageHeaderAccessor headerAccessor) throws Throwable {
+    public List<Message> listOldMessagesFromUserOnSubscribe(
+            final UserDto userDto,
+            final SimpMessageHeaderAccessor headerAccessor) throws Throwable {
         final String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
         return messageService.findMessageHistoryFor(userDto.getUsername(), chatRoomId);
     }
@@ -71,7 +81,6 @@ public class ChatRoomController {
         final String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
         message.setFromUser(userDto.getUsername());
         message.setChatRoomId(chatRoomId);
-        // todo send message to destination
         messageService.sendMessageToConversation(message);
     }
 }
