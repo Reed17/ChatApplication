@@ -1,10 +1,13 @@
 package com.impltech.chatApp.service.impl;
 
+import com.impltech.chatApp.config.HeaderProperties;
+import com.impltech.chatApp.config.JwtProperties;
 import com.impltech.chatApp.dto.*;
 import com.impltech.chatApp.entity.User;
 import com.impltech.chatApp.enums.Message;
 import com.impltech.chatApp.exceptions.UserAlreadyExistsException;
 import com.impltech.chatApp.exceptions.UserNotExistsException;
+import com.impltech.chatApp.security.JwtProvider;
 import com.impltech.chatApp.security.UserPrincipal;
 import com.impltech.chatApp.service.AuthenticationService;
 import com.impltech.chatApp.service.UserService;
@@ -25,17 +28,23 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
+    private final JwtProvider jwtProvider;
+    private final JwtProperties jwtProperties;
+    private final HeaderProperties headerProperties;
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
 
     @Autowired
-    public AuthenticationServiceImpl(final UserService userService, final AuthenticationManager authenticationManager) {
+    public AuthenticationServiceImpl(JwtProvider jwtProvider, JwtProperties jwtProperties, HeaderProperties headerProperties, UserService userService, AuthenticationManager authenticationManager) {
+        this.jwtProvider = jwtProvider;
+        this.jwtProperties = jwtProperties;
+        this.headerProperties = headerProperties;
         this.userService = userService;
         this.authenticationManager = authenticationManager;
     }
 
     @Override
-    public SignUpResponse signUp(final SignUpRequest signUpRequest, final HttpServletResponse response) throws Throwable {
+    public JwtAuthenticationResponse signUp(final SignUpRequest signUpRequest, final HttpServletResponse response) throws Throwable {
         if (userService.existsByEmail(signUpRequest.getEmail())) {
             final String errMsg = Message.USER_ALREADY_EXISTS.getMessage();
             LOG.error(errMsg);
@@ -52,20 +61,19 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         final UserPrincipal userPrincipal = UserPrincipal.create(newUser);
 
-        final UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(userPrincipal, null, userPrincipal.getAuthorities());
-
-        SecurityContextHolder.getContext().setAuthentication(authToken);
-
-        return new SignUpResponse(
-                signUpRequest.getEmail(),
-                signUpRequest.getUsername(),
-                new Date()
-        );
+        final String accessToken = jwtProvider.generateAccessToken(userPrincipal);
+        response.setHeader(headerProperties.getName(), headerProperties.getType() + accessToken);
+        System.out.println(accessToken);
+        return new JwtAuthenticationResponse(accessToken,
+                new SignUpResponse(
+                        signUpRequest.getEmail(),
+                        signUpRequest.getUsername(),
+                        new Date()
+                ));
     }
 
     @Override
-    public LoginResponse signIn(final LoginRequest loginRequest, final HttpServletResponse response) throws Throwable {
+    public JwtAuthenticationResponse signIn(final LoginRequest loginRequest, final HttpServletResponse response) throws Throwable {
         if (!userService.existsByEmail(loginRequest.getEmail())) {
             final String errMsg = Message.USER_WITH_SUCH_EMAIL_NOT_EXISTS.getMessage();
             LOG.error(errMsg);
@@ -79,6 +87,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 authenticationManager.authenticate(authToken);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return new LoginResponse(loginRequest.getEmail(), new Date());
+        final UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+        final String accessToken = jwtProvider.generateAccessToken(userPrincipal);
+        response.setHeader(headerProperties.getName(), headerProperties.getType() + accessToken);
+        System.out.println(accessToken);
+        return new JwtAuthenticationResponse(accessToken,
+                new LoginResponse(
+                        loginRequest.getEmail(),
+                        new Date()));
     }
 }

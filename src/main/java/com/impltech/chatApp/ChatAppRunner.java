@@ -1,6 +1,8 @@
 package com.impltech.chatApp;
 
 import com.impltech.chatApp.config.ChatRelayProperties;
+import com.impltech.chatApp.config.HeaderProperties;
+import com.impltech.chatApp.config.JwtProperties;
 import com.impltech.chatApp.config.WebSocketProperties;
 import com.impltech.chatApp.repository.MessageRepository;
 import org.springframework.boot.SpringApplication;
@@ -12,7 +14,9 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @EnableMongoRepositories(basePackageClasses = {MessageRepository.class})
 @EnableConfigurationProperties(value = {
         WebSocketProperties.class,
-        ChatRelayProperties.class
+        ChatRelayProperties.class,
+        JwtProperties.class,
+        HeaderProperties.class
 })
 public class ChatAppRunner {
     public static void main(String[] args) {

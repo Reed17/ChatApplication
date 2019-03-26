@@ -17,7 +17,7 @@ public class UserPrincipal implements UserDetails {
     private String username;
     private transient String email;
     private transient String password;
-    private Set<? extends GrantedAuthority> authorities = new HashSet<>();
+    private Set<? extends GrantedAuthority> authorities;
 
     public UserPrincipal(Long userId, String username, String email, String password, Set<? extends GrantedAuthority> authorities) {
         this.userId = userId;

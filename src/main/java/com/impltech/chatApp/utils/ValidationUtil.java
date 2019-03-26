@@ -39,7 +39,7 @@ public class ValidationUtil {
         }
     }
 
-    public static void isMessageEmpty(final String message) throws Throwable {
+    public static void isMessageContentEmpty(final String message) throws Throwable {
         if (message == null || message.isEmpty()) {
             final String errMsg = Message.EMPTY_MESSAGE.getMessage();
             doThrowingAction(errMsg, new EmptyMessageException(errMsg));

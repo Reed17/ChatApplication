@@ -1,5 +1,7 @@
 package com.impltech.chatApp.config;
 
+import com.impltech.chatApp.security.JwtAuthenticationFilter;
+import com.impltech.chatApp.security.JwtProvider;
 import com.impltech.chatApp.security.UnauthorizedAuthenticationEntryPoint;
 import com.impltech.chatApp.security.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,24 +13,33 @@ import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(
+        prePostEnabled = true,
+        securedEnabled = true,
+        jsr250Enabled = true
+)
 public class HttpSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final JwtProvider jwtProvider;
     private final UserDetailsServiceImpl userDetailsService;
     private final UnauthorizedAuthenticationEntryPoint authenticationEntryPoint;
 
     @Autowired
-    public HttpSecurityConfig(final UserDetailsServiceImpl userDetailsService,
-                              final UnauthorizedAuthenticationEntryPoint authenticationEntryPoint) {
+    public HttpSecurityConfig(JwtProvider jwtProvider, UserDetailsServiceImpl userDetailsService, UnauthorizedAuthenticationEntryPoint authenticationEntryPoint) {
+        this.jwtProvider = jwtProvider;
         this.userDetailsService = userDetailsService;
         this.authenticationEntryPoint = authenticationEntryPoint;
     }
@@ -48,29 +59,45 @@ public class HttpSecurityConfig extends WebSecurityConfigurerAdapter {
         source.registerCorsConfiguration("/**", corsConfiguration);
         return new CorsFilter(source);
     }
+
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
+        return new JwtAuthenticationFilter(jwtProvider, authenticationEntryPoint, userDetailsService);
+    }
+
+    /*@Bean
+    public CsrfHeaderFilter csrfHeaderFilter() {
+        return new CsrfHeaderFilter();
+    }*/
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf()
                 .disable()
-                .addFilterBefore(
-                        new BasicAuthenticationFilter(authenticationManagerBean(), authenticationEntryPoint),
-                        BasicAuthenticationFilter.class)
                 .exceptionHandling()
-                .authenticationEntryPoint(authenticationEntryPoint)
+                    .authenticationEntryPoint(authenticationEntryPoint)
+                .and()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/auth/**").permitAll()
+                    .antMatchers("/api/auth/**", "/chatroom/**").permitAll()
+                    .antMatchers("/ws/**").permitAll()
+                .anyRequest().authenticated();
                 /*.and()
-                .authorizeRequests()
-                    .antMatchers("/ws/**").authenticated()
-                    .antMatchers("/chatroom/**").authenticated()
-                    .antMatchers("/topic/**").authenticated()
-                    .antMatchers("/queue/**").authenticated()
-                    .antMatchers("/app/**").authenticated()*/
+                    .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
+                .csrf()
+                    .csrfTokenRepository(csrfTokenRepository())*/
+                /*.authorizeRequests()
+                    .antMatchers("/ws/**").permitAll()
+                    .antMatchers("/chatroom/**").permitAll()
+                    .antMatchers("/app/**").permitAll()
+                .antMatchers("/topic/**").authenticated()
+                .antMatchers("/queue/**").authenticated()*/
 
-                .anyRequest()
-                .authenticated();
+
     }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -90,4 +117,10 @@ public class HttpSecurityConfig extends WebSecurityConfigurerAdapter {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    /*private CsrfTokenRepository csrfTokenRepository() {
+        HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
+        httpSessionCsrfTokenRepository.setHeaderName("X-XSRF-TOKEN");
+        return httpSessionCsrfTokenRepository;
+    }*/
 }

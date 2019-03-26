@@ -53,3 +53,10 @@ app:
       host: localhost
       port: 61613
 
+
+jwt:
+  secretKey: JwtSecretKey
+  expirationTimeMs: 604800000
+header:
+  name: Authorization
+  type: "Bearer "

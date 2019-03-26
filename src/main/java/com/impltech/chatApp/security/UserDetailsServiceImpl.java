@@ -27,13 +27,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(final String username) throws UsernameNotFoundException {
-        final User user = userRepository.findByEmail(username);
-        if (!userRepository.existsByEmail(username)) {
-            final String errMsg = Message.USER_NOT_FOUND.getMessage();
-            LOG.error(errMsg);
-            throw new UserNotFoundException(errMsg);
-        }
+    public UserDetails loadUserByUsername(final String email) throws UsernameNotFoundException {
+        final User user = userRepository.findByEmail(email);
         return UserPrincipal.create(user);
+    }
+
+    public UserDetails loadUserById(final Long userId) {
+        final Optional<User> userWrapper = userRepository.findById(userId);
+        return UserPrincipal.create(userWrapper.get());
     }
 }

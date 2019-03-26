@@ -23,7 +23,7 @@ public class MongoMessageServiceImpl implements MessageService {
     // todo is it better when value will return?
     @Override
     public void sendMessageToConversation(final Message message) throws Throwable {
-        isMessageEmpty(message.getContent());
+        isMessageContentEmpty(message.getContent());
 
         setUsernameToMessageObject(message, message.getFromUser());
         saveMessage(message);
@@ -39,7 +39,7 @@ public class MongoMessageServiceImpl implements MessageService {
     }
 
     private Message saveMessage(final Message message) throws Throwable {
-        isMessageEmpty(message.getContent());
+        isMessageContentEmpty(message.getContent());
         return messageRepository.save(message);
     }
 

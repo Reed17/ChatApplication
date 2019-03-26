@@ -19,8 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.impltech.chatApp.utils.ValidationUtil.isChatRoomExists;
-import static com.impltech.chatApp.utils.ValidationUtil.isMessageEmpty;
+import static com.impltech.chatApp.utils.ValidationUtil.isMessageContentEmpty;
 
 @Service
 public class RedisChatRoomServiceImpl implements ChatRoomService {
@@ -89,7 +88,7 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
 
     @Override
     public void sendMessage(final Message message) throws Throwable {
-        isMessageEmpty(message.getContent());
+        isMessageContentEmpty(message.getContent());
         // todo send message to user
         webSocketMessagingTemplate.convertAndSendToUser(
                 message.getToUser(),

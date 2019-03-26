@@ -68,6 +68,6 @@ dependencies {
     compile group: 'io.projectreactor', name: 'reactor-core', version: projectReactorVersion
     compile group: 'io.projectreactor', name: 'reactor-net', version: reactorNetVersion
     compile group: 'io.projectreactor.netty', name: 'reactor-netty', version: reactorNettyVersion
-
+    compile group: 'io.jsonwebtoken', name: 'jjwt', version: '0.9.1'
     compile group: 'com.googlecode.json-simple', name: 'json-simple', version: jsonSimpleVersion
 }

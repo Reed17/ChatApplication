@@ -34,6 +34,7 @@ public class ChatRoomController {
 
     @PostMapping("/chatroom/new")
     public ResponseEntity<?> createChatRoom(@RequestBody final ChatRoomDto chatRoomDto) {
+        System.out.println(chatRoomDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(chatRoomService.save(chatRoomDto));
     }
 
@@ -77,7 +78,9 @@ public class ChatRoomController {
     }
 
     @MessageMapping("/send.message")
-    public void sendMessage(@Payload final Message message, final UserDto userDto, final SimpMessageHeaderAccessor headerAccessor) throws Throwable {
+    public void sendMessage(@Payload final Message message,
+                                     final UserDto userDto,
+                                     final SimpMessageHeaderAccessor headerAccessor) throws Throwable {
         final String chatRoomId = headerAccessor.getSessionAttributes().get("chatRoomId").toString();
         message.setFromUser(userDto.getUsername());
         message.setChatRoomId(chatRoomId);

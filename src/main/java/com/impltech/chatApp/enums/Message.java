@@ -9,7 +9,9 @@ public enum Message {
     CHAT_ROOM_NOT_EXISTS("Chat room doesn't exists!"),
     USER_ALREADY_EXISTS("User with this email already exists!"),
     USER_WITH_SUCH_EMAIL_NOT_EXISTS("User with such email doesn't exists!"),
-    UNAUTHORIZED_ACCESS("You are not authorized to access this resource!");
+    UNAUTHORIZED_ACCESS("You are not authorized to access this resource!"),
+    INVALID_TOKEN("Invalid access token!"),
+    AUTHENTICATION_FAILED("Failed to authenticate user!");
 
     private final String message;
 
