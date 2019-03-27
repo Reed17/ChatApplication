@@ -19,7 +19,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -65,11 +64,6 @@ public class HttpSecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtAuthenticationFilter(jwtProvider, authenticationEntryPoint, userDetailsService);
     }
 
-    /*@Bean
-    public CsrfHeaderFilter csrfHeaderFilter() {
-        return new CsrfHeaderFilter();
-    }*/
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -83,21 +77,10 @@ public class HttpSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                    .antMatchers("/api/auth/**", "/chatroom/**").permitAll()
+                // todo configure properly
+                    .antMatchers("/api/auth/**").permitAll()
                     .antMatchers("/ws/**").permitAll()
                 .anyRequest().authenticated();
-                /*.and()
-                    .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
-                .csrf()
-                    .csrfTokenRepository(csrfTokenRepository())*/
-                /*.authorizeRequests()
-                    .antMatchers("/ws/**").permitAll()
-                    .antMatchers("/chatroom/**").permitAll()
-                    .antMatchers("/app/**").permitAll()
-                .antMatchers("/topic/**").authenticated()
-                .antMatchers("/queue/**").authenticated()*/
-
-
     }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)
@@ -118,9 +101,4 @@ public class HttpSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    /*private CsrfTokenRepository csrfTokenRepository() {
-        HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
-        httpSessionCsrfTokenRepository.setHeaderName("X-XSRF-TOKEN");
-        return httpSessionCsrfTokenRepository;
-    }*/
 }
