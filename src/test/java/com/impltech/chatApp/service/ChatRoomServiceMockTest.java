@@ -111,8 +111,8 @@ public class ChatRoomServiceMockTest {
         when(chatRoomRepositoryMock.save(roomWithOneUser))
                 .thenAnswer((Answer<ChatRoom>) invocation -> {
                     ChatRoom room = invocation.getArgument(0);
-                    room.getConnectedUsers().add(0, joiningUser);
-                    room.getConnectedUsers().remove(1); // hardcoded now users size = 1
+                    room.getConnectedUsers().add(0, joiningUser); // now users size = 1
+                    room.getConnectedUsers().remove(1); // hardcoded to remove this user
                     return room;
                 });
 
