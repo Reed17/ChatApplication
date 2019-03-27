@@ -63,7 +63,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
         final String accessToken = jwtProvider.generateAccessToken(userPrincipal);
         response.setHeader(headerProperties.getName(), headerProperties.getType() + accessToken);
-        System.out.println(accessToken);
         return new JwtAuthenticationResponse(accessToken,
                 new SignUpResponse(
                         signUpRequest.getEmail(),
@@ -90,7 +89,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         final UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         final String accessToken = jwtProvider.generateAccessToken(userPrincipal);
         response.setHeader(headerProperties.getName(), headerProperties.getType() + accessToken);
-        System.out.println(accessToken);
         return new JwtAuthenticationResponse(accessToken,
                 new LoginResponse(
                         loginRequest.getEmail(),

@@ -67,9 +67,7 @@ public class AuthenticationControllerIntegrationTest {
         this.mockMvc.perform(post(API_AUTH_SIGNUP)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(this.objectMapper.writeValueAsString(signUpRequest)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.email", is("test@gmail.com")))
-                .andExpect(jsonPath("$.username", is("test")));
+                .andExpect(status().isCreated());
     }
 
     @Test
