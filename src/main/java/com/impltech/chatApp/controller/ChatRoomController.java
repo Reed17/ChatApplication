@@ -34,7 +34,6 @@ public class ChatRoomController {
 
     @PostMapping("/chatroom/new")
     public ResponseEntity<?> createChatRoom(@RequestBody final ChatRoomDto chatRoomDto) {
-        System.out.println(chatRoomDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(chatRoomService.save(chatRoomDto));
     }
 

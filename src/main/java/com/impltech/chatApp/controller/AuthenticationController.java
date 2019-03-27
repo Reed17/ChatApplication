@@ -28,7 +28,6 @@ public class AuthenticationController {
     @PostMapping("/signup")
     public ResponseEntity<?> signUp(@RequestBody final SignUpRequest signUpRequest,
                                     final HttpServletResponse response) throws Throwable {
-        System.out.println(signUpRequest.toString());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(authenticationService.signUp(signUpRequest, response));
