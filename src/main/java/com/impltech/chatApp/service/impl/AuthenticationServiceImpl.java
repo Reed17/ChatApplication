@@ -19,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
@@ -43,6 +44,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
+    @Transactional
     @Override
     public JwtAuthenticationResponse signUp(final SignUpRequest signUpRequest, final HttpServletResponse response) throws Throwable {
         if (userService.existsByEmail(signUpRequest.getEmail())) {
@@ -71,6 +73,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 ));
     }
 
+    @Transactional
     @Override
     public JwtAuthenticationResponse signIn(final LoginRequest loginRequest, final HttpServletResponse response) throws Throwable {
         if (!userService.existsByEmail(loginRequest.getEmail())) {

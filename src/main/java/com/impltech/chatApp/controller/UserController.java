@@ -11,18 +11,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/users")
+@PreAuthorize("hasAnyAuthority('USER')")
 public class UserController {
 
     private final UserService userService;
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(final UserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/{email}")
-    @PreAuthorize("hasAnyAuthority('USER')")
+    @GetMapping("/mail/{email}")
     public ResponseEntity<?> getUserByEmail(@PathVariable("email") final String email) throws Throwable {
         return ResponseEntity.ok().body(userService.findByEmail(email));
+    }
+
+    @GetMapping("/name/{username}")
+    public ResponseEntity<?> getUserByUsername(@PathVariable("username") final String username) throws Throwable {
+        return ResponseEntity.ok().body(userService.findByUsername(username));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable("id") final Long userId) throws Throwable {
+        return ResponseEntity.ok().body(userService.findById(userId));
     }
 }

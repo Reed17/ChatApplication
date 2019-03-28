@@ -12,5 +12,4 @@ public class WebSocketSecurityConfiguration extends AbstractSecurityWebSocketMes
         messages
                 .anyMessage().permitAll();
     }
-
 }

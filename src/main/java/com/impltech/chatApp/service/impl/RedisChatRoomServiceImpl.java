@@ -10,6 +10,7 @@ import com.impltech.chatApp.mapper.UserMapper;
 import com.impltech.chatApp.repository.ChatRoomRepository;
 import com.impltech.chatApp.service.ChatRoomService;
 import com.impltech.chatApp.service.MessageService;
+import com.impltech.chatApp.service.UserService;
 import com.impltech.chatApp.utils.DestinationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -26,6 +27,7 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
 
     private final SimpMessagingTemplate webSocketMessagingTemplate;
     private final MessageService messageService;
+    private final UserService userService;
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMapper roomMapper;
     private final UserMapper userMapper;
@@ -34,11 +36,13 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
     public RedisChatRoomServiceImpl(
             final SimpMessagingTemplate webSocketMessagingTemplate,
             final MessageService messageService,
+            final UserService userService,
             final ChatRoomRepository chatRoomRepository,
             final ChatRoomMapper roomMapper,
             final UserMapper userMapper) {
         this.webSocketMessagingTemplate = webSocketMessagingTemplate;
         this.messageService = messageService;
+        this.userService = userService;
         this.chatRoomRepository = chatRoomRepository;
         this.roomMapper = roomMapper;
         this.userMapper = userMapper;
@@ -53,31 +57,29 @@ public class RedisChatRoomServiceImpl implements ChatRoomService {
     @Override
     public ChatRoomDto getById(final String chatRoomId) {
         final Optional<ChatRoom> chatRoomWrapper = getByIdInternal(chatRoomId);
-        return getChatRoomDto(getRoomFromWrapper(chatRoomWrapper));
+        return getChatRoomDto(chatRoomWrapper.get());
     }
 
     @Override
-    public ChatRoomDto join(final UserDto userDto, final String chatRoomId) {
-        final User user = getUser(userDto);
+    public ChatRoomDto join(final Long userId, final String chatRoomId) throws Throwable {
+        Optional<User> userWrapper = userService.findById(userId);
         final Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomId);
-        final ChatRoom room = getRoomFromWrapper(roomWrapper);
+        final ChatRoom room = roomWrapper.get();
 
-        room.getConnectedUsers().add(user);
+        room.getConnectedUsers().add(userWrapper.get());
 
         saveChatRoom(room);
         updateConnectedUsersViaWebSocket(room);
         return getChatRoomDto(room);
     }
 
-    private ChatRoom getRoomFromWrapper(Optional<ChatRoom> roomWrapper) {
-        return roomWrapper.get();
-    }
-
     @Override
-    public ChatRoomDto leave(final UserDto userDto, final String chatRoomId) {
-        final User user = getUser(userDto);
+    public ChatRoomDto leave(final Long userId, final String chatRoomId) throws Throwable {
+        Optional<User> userWrapper = userService.findById(userId);
+        final User user = userWrapper.get();
+
         final Optional<ChatRoom> roomWrapper = getByIdInternal(chatRoomId);
-        final ChatRoom room = getRoomFromWrapper(roomWrapper);
+        final ChatRoom room = roomWrapper.get();
 
         room.getConnectedUsers().remove(user);
 

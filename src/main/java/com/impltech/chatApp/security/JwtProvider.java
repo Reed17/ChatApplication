@@ -54,11 +54,20 @@ public class JwtProvider {
     public Boolean validateAccessToken(final String accessToken) {
         try {
             Jwts.parser().setSigningKey(jwtProperties.getSecretKey()).parseClaimsJws(accessToken);
+
             return true;
-        } catch (SignatureException | MalformedJwtException | ExpiredJwtException
-                | UnsupportedJwtException | IllegalArgumentException ex) {
-            LOG.error(Message.INVALID_TOKEN.getMessage());
-            return false;
+        } catch (SignatureException ex) {
+            LOG.error("Invalid JWT signature");
+        } catch (MalformedJwtException ex) {
+            LOG.error("Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            LOG.error("Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            LOG.error("Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            LOG.error("JWT claims string is empty.");
         }
+
+        return false;
     }
 }

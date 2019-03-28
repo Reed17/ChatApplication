@@ -35,7 +35,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+        // TODO here is the issue when user register, then token always null, because we don`t set it to localstorage
+        // TODO when register
+        // TODO on front side, can see it in logs. BUT ALL STILL WORKS
         final String accessToken = jwtProvider.getTokenFromRequest(request);
+        System.out.println(accessToken);
         try {
             if (StringUtils.hasText(accessToken) && jwtProvider.validateAccessToken(accessToken)) {
                 final Long userId = jwtProvider.getUserIdFromToken(accessToken);

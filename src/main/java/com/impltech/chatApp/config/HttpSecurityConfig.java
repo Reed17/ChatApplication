@@ -45,7 +45,18 @@ public class HttpSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public CorsFilter  corsFilter() {
+        return new CorsFilter(corsConfigurationSource());
+    }
+
+    @Bean
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration());
+        return source;
+    }
+
+    @Bean
+    public CorsConfiguration corsConfiguration() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
         corsConfiguration.addAllowedHeader("*");
@@ -55,8 +66,7 @@ public class HttpSecurityConfig extends WebSecurityConfigurerAdapter {
         corsConfiguration.addAllowedMethod(HttpMethod.GET);
         corsConfiguration.addAllowedMethod(HttpMethod.PUT);
         corsConfiguration.addAllowedMethod(HttpMethod.DELETE);
-        source.registerCorsConfiguration("/**", corsConfiguration);
-        return new CorsFilter(source);
+        return corsConfiguration;
     }
 
     @Bean
@@ -67,9 +77,9 @@ public class HttpSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .csrf()
                 .disable()
+                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling()
                     .authenticationEntryPoint(authenticationEntryPoint)
                 .and()
@@ -77,10 +87,13 @@ public class HttpSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                // todo configure properly
                     .antMatchers("/api/auth/**").permitAll()
-                    .antMatchers("/ws/**").permitAll()
                 .anyRequest().authenticated();
+
+        http
+                .addFilterBefore(corsFilter(), CorsFilter.class)
+                .cors()
+                .configurationSource(corsConfigurationSource());
     }
 
     @Bean(BeanIds.AUTHENTICATION_MANAGER)

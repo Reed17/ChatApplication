@@ -32,32 +32,32 @@ public class ChatRoomController {
         this.messageService = messageService;
     }
 
-    @PostMapping("/chatroom/new")
+    @PostMapping("/api/chatroom/new")
     public ResponseEntity<?> createChatRoom(@RequestBody final ChatRoomDto chatRoomDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(chatRoomService.save(chatRoomDto));
     }
 
-    @GetMapping("/chats")
+    @GetMapping("/api/chatrooms")
     public ResponseEntity<?> getChatRooms() {
         return ResponseEntity
                 .ok()
                 .body(chatRoomService.getAllChatRoomsList());
     }
 
-    @PutMapping("/chatroom/{chatRoomId}/join")
+    @PutMapping("/api/chatroom/{chatRoomId}/join/{userId}")
     public ResponseEntity<?> joinTheRoom(@PathVariable("chatRoomId") final String chatRoomId,
-                                         @RequestBody final UserDto userDto) {
+                                         @PathVariable("userId") final Long userId) throws Throwable {
         return ResponseEntity
                 .ok()
-                .body(chatRoomService.join(userDto, chatRoomId));
+                .body(chatRoomService.join(userId, chatRoomId));
     }
 
-    @PutMapping("/chatroom/{chatRoomId}/leave")
+    @PutMapping("/api/chatroom/{chatRoomId}/leave/{userId}")
     public ResponseEntity<?> leaveTheRoom(@PathVariable("chatRoomId") final String chatRoomId,
-                                         @RequestBody final UserDto userDto) {
+                                         @PathVariable("userId") final Long userId) throws Throwable {
         return ResponseEntity
                 .ok()
-                .body(chatRoomService.leave(userDto, chatRoomId));
+                .body(chatRoomService.leave(userId, chatRoomId));
     }
 
     // TODO add response wrappers
