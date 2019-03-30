@@ -1,4 +1,4 @@
-package com.impltech.chatApp.config;
+package com.impltech.chatApp.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.messaging.MessageSecurityMetadataSourceRegistry;

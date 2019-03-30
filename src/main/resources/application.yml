@@ -6,14 +6,17 @@ spring:
       ddl-auto: create-drop
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5Dialect
+        dialect: org.hibernate.dialect.PostgreSQL95Dialect
+        jdbc:
+          lob:
+            non_contextual_creation: true
 
   # Datasource configuration
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/store?createDatabaseIfNotExist=true
-    username: root
-    password: root
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/store
+    username: postgres
+    password: postgres
     initialization-mode: always
 
   session:
@@ -32,6 +35,9 @@ spring:
 
   messages:
     cache-duration: 0
+  rabbitmq:
+    addresses:
+    port: 5672
 
 # Server session properties
 server:
